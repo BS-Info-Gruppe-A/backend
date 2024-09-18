@@ -12,5 +12,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 22
+          cache: maven
       - uses: gradle/develocity-actions/maven-setup@v1
-      - run: mvn verify
+      - run: ./mvnw verify
