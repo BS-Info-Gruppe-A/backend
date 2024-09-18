@@ -27,5 +27,4 @@ tasks {
         options.compilerArgs.add("--enable-preview")
         options.encoding = "UTF-8"
     }
-
 }
