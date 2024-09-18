@@ -1,6 +1,8 @@
 DROP DATABASE IF EXISTS backend;
 CREATE DATABASE backend;
 
+USE backend;
+
 DROP TABLE IF EXISTS readings;
 DROP TABLE IF EXISTS customers;
 
