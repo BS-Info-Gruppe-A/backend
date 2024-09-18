@@ -1,14 +1,7 @@
 plugins {
     java
     application
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-
+    `jvm-test-suite`
 }
 
 application {
@@ -27,5 +20,12 @@ tasks {
         options.compilerArgs.add("--enable-preview")
         options.encoding = "UTF-8"
     }
+}
 
+testing {
+    suites {
+        named<JvmTestSuite>("test") {
+            useJUnitJupiter()
+        }
+    }
 }
