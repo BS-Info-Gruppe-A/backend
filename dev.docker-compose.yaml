@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:alpine
+    restart: unless-stopped
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=bs
+      - POSTGRES_PASSWORD=bs
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
