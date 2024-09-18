@@ -11,7 +11,7 @@ CREATE TYPE Gender AS ENUM ('M', 'W', 'D', 'U');
 
 CREATE TABLE customers
 (
-    id         SERIAL PRIMARY KEY,
+    id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     last_name  TEXT,
     first_name TEXT,
     birth_date TIMESTAMP,
@@ -23,8 +23,8 @@ CREATE TYPE MeterType AS ENUM ('HEIZUNG','STROM','WASSER','UNBEKANNT');
 
 CREATE TABLE readings
 (
-    id          SERIAL PRIMARY KEY,
-    customer_id INT REFERENCES customers (id),
+    id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    customer_id uuid REFERENCES customers (id),
     read_date   TIMESTAMP,
     meter_id    INT,
     meter_type  MeterType,
