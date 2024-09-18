@@ -22,7 +22,7 @@ services:
       - "8080:80"
     volumes:
       - ./pgadmin/servers.json:/pgadmin4/servers.json
-      - /var/lib/pgadmin:pgadmin_data
+      - pgadmin_data:/var/lib/pgadmin
 
 volumes:
   postgres_data:
