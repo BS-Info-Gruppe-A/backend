@@ -11,6 +11,19 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4:8
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: gruppe-a@bsinfo.eu
+      PGADMIN_DEFAULT_PASSWORD: bs
+    ports:
+      - "8080:80"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - /var/lib/pgadmin:pgadmin_data
 
 volumes:
   postgres_data:
+  pgadmin_data:
