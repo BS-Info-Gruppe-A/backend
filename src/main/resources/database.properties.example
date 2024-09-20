@@ -1,0 +1,7 @@
+#Example properties file for the database properties
+VornameNachname.db.url=jdbc:postgresql://localhost:5432/bs
+VornameNachname.db.user=bs
+VornameNachname.db.password=bs
+
+
+
