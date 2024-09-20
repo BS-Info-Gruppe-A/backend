@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Properties;
 
 public record Config(String url, String username, String password) {
-
     public static Config fromDefault() {
         var systemUser = System.getProperty("user.name");
         var systemHome = System.getProperty("user.home");

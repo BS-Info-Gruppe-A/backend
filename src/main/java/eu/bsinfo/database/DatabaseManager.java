@@ -25,7 +25,6 @@ public class DatabaseManager {
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(password);
-        config.setDriverClassName("org.postgresql.Driver");
 
         dataSource = new HikariDataSource(config);
     }
@@ -35,7 +34,7 @@ public class DatabaseManager {
      * This connection should be closed after usage using a {@code try-with-resources} block
      *
      * @return the newly created {@link Connection}
-     * @throws SQLException if a database access error occurrs
+     * @throws SQLException if a database access error occurs
      */
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
