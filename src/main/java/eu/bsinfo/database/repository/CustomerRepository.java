@@ -1,7 +1,6 @@
 package eu.bsinfo.database.repository;
 
 import eu.bsinfo.database.DatabaseManager;
-import eu.bsinfo.entity.DefaultCustomer;
 import eu.bsinfo.entity.ICustomer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,19 +34,7 @@ public class CustomerRepository extends Repository<ICustomer> {
                 statement.setObject(1, id);
                 try(var resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        var dbId = resultSet.getObject("id", UUID.class);
-                        var birthDate = resultSet.getTimestamp("birth_date");
-                        var firstName = resultSet.getString("first_name");
-                        var gender = resultSet.getString("gender");
-                        var lastName = resultSet.getString("last_name");
-
-                        return new DefaultCustomer(
-                                dbId,
-                                birthDate.toLocalDateTime().toLocalDate(),
-                                firstName,
-                                ICustomer.Gender.valueOf(gender),
-                                lastName
-                        );
+                        return ICustomer.from(resultSet);
                     } else {
                         return null;
                     }

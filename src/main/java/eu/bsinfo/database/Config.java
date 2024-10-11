@@ -60,7 +60,6 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
             Objects.requireNonNull(password, "Please specify db.password in database.properties");
 
             return new Config(url, username, password);
-
         } catch (IOException e) {
             throw new IllegalStateException("Could not read database.properties, please refer to README", e);
         }
