@@ -14,17 +14,29 @@ public class DatabaseManager {
     private final DataSource dataSource;
 
     /**
-     * Constructor.
+     * Constructor using default pool size (10).
      * @param url the database url to use
      * @param user the user to use
      * @param password the password to use
      */
     public DatabaseManager(String url, String user, String password) {
+        this(url, user, password, 10);
+    }
+
+    /**
+     * Constructor.
+     * @param url the database url to use
+     * @param user the user to use
+     * @param password the password to use
+     * @param maximumPoolSize the maximum connection pool size
+     */
+    public DatabaseManager(String url, String user, String password, int maximumPoolSize) {
         var config = new HikariConfig();
 
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(password);
+        config.setMaximumPoolSize(maximumPoolSize);
 
         dataSource = new HikariDataSource(config);
     }

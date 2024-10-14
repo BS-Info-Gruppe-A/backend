@@ -18,7 +18,7 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     protected abstract void mutateEntity(@NotNull T entity);
 
     protected DatabaseManager getDatabaseManager() {
-        return new DatabaseManager(psql.getJdbcUrl(), psql.getUsername(), psql.getPassword());
+        return new DatabaseManager(psql.getJdbcUrl(), psql.getUsername(), psql.getPassword(), 1);
     }
 
     @BeforeAll
