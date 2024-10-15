@@ -29,7 +29,10 @@ public class ReradingRepository extends Repository<IReading>{
     @Override
     public @Nullable IReading findById(@NotNull UUID id) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
-            try(var statement = connection.prepareStatement("SELECT * FROM readings WHERE id = ?")) {
+            try(var statement = connection.prepareStatement("""
+                    SELECT * FROM readings WHERE id = ?
+                    JOIN customers c on c.id = customer_id
+                    """)) {
                 statement.setObject(1, id);
                 try(var resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
@@ -55,12 +58,15 @@ public class ReradingRepository extends Repository<IReading>{
     @Override
     public boolean insert(@NotNull IReading entity) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
-            try (var statement = connection.prepareStatement("INSERT INTO readings (id, birth_date, first_name, gender, last_name) VALUES (?, ?, ?, ?, ?)")) {
+            try (var statement = connection.prepareStatement("INSERT INTO readings (id, comment, customer_id, read_date, meter_type, meter_count, meter_id, substitute) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
                 statement.setObject(1, entity.getId());
-                statement.setTimestamp(2, Timestamp.valueOf(entity.getBirthDate().atTime(0, 0)));
-                statement.setString(3, entity.getFirstName());
-                statement.setObject(4, entity.getGender(), Types.OTHER);
-                statement.setString(5, entity.getLastName());
+                statement.setString(2, entity.getComment());
+                statement.setObject(3, entity.getCustomer().getId());
+                statement.setTimestamp(4, Timestamp.valueOf(entity.getDateOfReading().atTime(0, 0)));
+                statement.setObject(5, entity.getKindOfMeter(), Types.OTHER);
+                statement.setDouble(6, entity.getMeterCount());
+                statement.setString(7, entity.getMeterId());
+                statement.setBoolean(8, entity.getSubstitute());
                 return statement.executeUpdate() > 0;
             }
         }
@@ -69,12 +75,15 @@ public class ReradingRepository extends Repository<IReading>{
     @Override
     public boolean update(@NotNull IReading entity) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
-            try (var statement = connection.prepareStatement("UPDATE readings SET birth_date = ?, first_name = ?, gender = ?, last_name = ? WHERE id = ?")) {
-                statement.setTimestamp(1, Timestamp.valueOf(entity.getBirthDate().atTime(0, 0)));
-                statement.setString(2, entity.getFirstName());
-                statement.setObject(3, entity.getGender(), Types.OTHER);
-                statement.setString(4, entity.getLastName());
-                statement.setObject(5, entity.getId());
+            try (var statement = connection.prepareStatement("UPDATE readings SET comment = ?, customer_id = ?, read_date = ?, meter_type = ?,  meter_count = ?,  meter_id = ?, substitute = ? WHERE id = ?")) {
+                statement.setString(1, entity.getComment());
+                statement.setObject(2, entity.getCustomer().getId());
+                statement.setTimestamp(3, Timestamp.valueOf(entity.getDateOfReading().atTime(0, 0)));
+                statement.setObject(4, entity.getKindOfMeter(), Types.OTHER);
+                statement.setDouble(5, entity.getMeterCount());
+                statement.setString(6, entity.getMeterId());
+                statement.setBoolean(7, entity.getSubstitute());
+                statement.setObject(8,entity.getId());
                 return statement.executeUpdate() > 0;
             }
         }

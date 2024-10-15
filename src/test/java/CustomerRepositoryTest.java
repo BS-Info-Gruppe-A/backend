@@ -15,6 +15,10 @@ public class CustomerRepositoryTest extends AbstractRepositoryTest<ICustomer>  {
 
     @Override
     protected ICustomer newEntity(UUID id) {
+        return getDefaultCustomer(id);
+    }
+
+    public static @NotNull DefaultCustomer getDefaultCustomer(UUID id) {
         return new DefaultCustomer(id, LocalDate.now(), "Marc", ICustomer.Gender.D, "Degner");
     }
 
