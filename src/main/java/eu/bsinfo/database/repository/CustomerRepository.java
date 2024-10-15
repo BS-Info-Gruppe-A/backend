@@ -27,6 +27,7 @@ public class CustomerRepository extends Repository<ICustomer> {
         super(databaseManager);
     }
 
+    //CRUD Read funktion
     @Override
     public @Nullable ICustomer findById(@NotNull UUID id) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
@@ -43,6 +44,7 @@ public class CustomerRepository extends Repository<ICustomer> {
         }
     }
 
+    //CRUD Delete funktion
     @Override
     public boolean delete(@NotNull UUID id) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
@@ -53,6 +55,7 @@ public class CustomerRepository extends Repository<ICustomer> {
         }
     }
 
+    //CRUD Create funktion
     @Override
     public boolean insert(@NotNull ICustomer entity) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
@@ -67,6 +70,7 @@ public class CustomerRepository extends Repository<ICustomer> {
         }
     }
 
+    //CRUD Update funktion
     @Override
     public boolean update(@NotNull ICustomer entity) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
