@@ -35,7 +35,7 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     @Order(1)
     public void testInsert() throws SQLException {
         var id = UUID.randomUUID();
-        Assertions.assertTrue(getRepository().insert(newEntity(id)), "Entity insert failed");
+        Assertions.assertTrue(getRepository().save(newEntity(id)), "Entity insert failed");
         Assertions.assertNotNull(getRepository().findById(id), "Entity not inserted");
     }
 
@@ -55,7 +55,7 @@ public abstract class AbstractRepositoryTest<T extends IId> {
 
         Assertions.assertNotNull(entity, "Entity not found");
         mutateEntity(entity);
-        Assertions.assertTrue(getRepository().update(entity), "Entity update failed");
+        Assertions.assertTrue(getRepository().save(entity), "Entity update failed");
         var updatedEntity = getRepository().findById(id);
 
         Assertions.assertEquals(entity, updatedEntity, "Entity not updated");
@@ -66,7 +66,8 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     @Order(4)
     public void testDelete() throws SQLException {
         var id = UUID.fromString("f889d010-3b3d-4517-9694-df6bcc806fba");
-        Assertions.assertTrue(getRepository().delete(id), "Entity delete failed");
+        var foundEntity = getRepository().findById(id);
+        Assertions.assertTrue(getRepository().delete(foundEntity), "Entity delete failed");
         Assertions.assertNull(getRepository().findById(id), "Entity not deleted");
     }
 }

@@ -29,7 +29,7 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
      * @return the parsed config.
      */
     @NotNull
-    public static Config fromDefault() {
+    public static Config fromDefault() throws IOException {
         var systemUser = System.getProperty("user.name");
         var systemHome = System.getProperty("user.home");
 
@@ -43,7 +43,7 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
      * @return the parsed config
      */
     @NotNull
-    public static Config fromFile(@NotNull Path path, @NotNull String systemUser) {
+    public static Config fromFile(@NotNull Path path, @NotNull String systemUser) throws IOException {
         Objects.requireNonNull(path, "path cannot be null");
         Objects.requireNonNull(systemUser, "systemUser cannot be null");
 
@@ -60,8 +60,6 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
             Objects.requireNonNull(password, "Please specify db.password in database.properties");
 
             return new Config(url, username, password);
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not read database.properties, please refer to README", e);
         }
     }
 }
