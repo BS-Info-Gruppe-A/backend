@@ -29,8 +29,9 @@ public class ReadingRepository extends Repository<IReading> {
     public @Nullable IReading findById(@NotNull UUID id) throws SQLException {
         try (var connection = databaseManager.getConnection()) {
             try(var statement = connection.prepareStatement("""
-                    SELECT * FROM readings WHERE id = ?
+                    SELECT * FROM readings
                     JOIN customers c on c.id = customer_id
+                    WHERE readings.id = ?
                     """)) {
                 statement.setObject(1, id);
                 try(var resultSet = statement.executeQuery()) {
@@ -64,7 +65,7 @@ public class ReadingRepository extends Repository<IReading> {
                 statement.setTimestamp(4, Timestamp.valueOf(entity.getDateOfReading().atTime(0, 0)));
                 statement.setObject(5, entity.getKindOfMeter(), Types.OTHER);
                 statement.setDouble(6, entity.getMeterCount());
-                statement.setString(7, entity.getMeterId());
+                statement.setInt(7, entity.getMeterId());
                 statement.setBoolean(8, entity.getSubstitute());
                 return statement.executeUpdate() > 0;
             }
@@ -80,7 +81,7 @@ public class ReadingRepository extends Repository<IReading> {
                 statement.setTimestamp(3, Timestamp.valueOf(entity.getDateOfReading().atTime(0, 0)));
                 statement.setObject(4, entity.getKindOfMeter(), Types.OTHER);
                 statement.setDouble(5, entity.getMeterCount());
-                statement.setString(6, entity.getMeterId());
+                statement.setInt(6, entity.getMeterId());
                 statement.setBoolean(7, entity.getSubstitute());
                 statement.setObject(8,entity.getId());
                 return statement.executeUpdate() > 0;

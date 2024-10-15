@@ -23,7 +23,7 @@ CREATE TABLE readings
     read_date   TIMESTAMP,
     meter_id    INT,
     meter_type  MeterType,
-    meter_count DOUBLE,
+    meter_count DOUBLE PRECISION,
     substitute  BOOLEAN,
     comment     TEXT
 );

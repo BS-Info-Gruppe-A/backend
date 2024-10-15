@@ -21,7 +21,7 @@ public interface IReading extends IId {
 
     Double getMeterCount();
 
-    String getMeterId();
+    int getMeterId();
 
     Boolean getSubstitute();
 
@@ -37,7 +37,7 @@ public interface IReading extends IId {
 
     void setMeterCount(Double meterCount);
 
-    void setMeterId(String meterId);
+    void setMeterId(int meterId);
 
     void setSubstitute(Boolean substitute);
 
@@ -50,14 +50,15 @@ public interface IReading extends IId {
      * @throws SQLException if an SQL error occurs
      */
     static IReading from(ResultSet resultSet) throws SQLException {
+        var id = resultSet.getObject("id", UUID.class);
         var comment = resultSet.getString("comment");
         var customer = ICustomer.from(resultSet, "customer_id");
         var dateOfReading = resultSet.getTimestamp("read_date").toLocalDateTime().toLocalDate();
         var kindOfMeter = resultSet.getString("meter_type");
         var meterCount = resultSet.getDouble("meter_count");
-        var meterId = resultSet.getString("meter_id");
+        var meterId = resultSet.getInt("meter_id");
         var substitute = resultSet.getBoolean("substitute");
 
-        return new DefaultReading(comment, customer, dateOfReading, KindOfMeter.valueOf(kindOfMeter), meterCount, meterId, substitute);
+        return new DefaultReading(id, comment, customer, dateOfReading, KindOfMeter.valueOf(kindOfMeter), meterCount, meterId, substitute);
     }
 }

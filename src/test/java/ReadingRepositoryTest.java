@@ -15,9 +15,9 @@ public class ReadingRepositoryTest extends AbstractRepositoryTest<IReading> {
 
     @Override
     protected IReading newEntity(UUID id) {
-        var customer = CustomerRepositoryTest.getDefaultCustomer(UUID.randomUUID());
+        var customer = CustomerRepositoryTest.getDefaultCustomer(UUID.fromString("0e6cf4ab-ec75-4922-80f2-9e4e23d06ad5"));
 
-        return new DefaultReading(" testComment", customer,  LocalDate.now(), IReading.KindOfMeter.valueOf("WASSER"), 67.00, "testId", true);
+        return new DefaultReading(id, " testComment", customer,  LocalDate.now(), IReading.KindOfMeter.valueOf("WASSER"), 67.00, 1337, true);
     }
 
     @Override

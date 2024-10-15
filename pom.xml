@@ -114,7 +114,7 @@
                     <execution>
                         <phase>test</phase>
                         <goals>
-                            <goal>report-only</goal>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>

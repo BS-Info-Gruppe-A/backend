@@ -6,15 +6,17 @@ import java.util.UUID;
 
 public class DefaultReading implements IReading{
 
+    private UUID id;
     private String comment;
     private ICustomer customer;
     private LocalDate dateOfReading;
     private KindOfMeter kindOfMeter;
     private Double meterCount;
-    private String meterId;
+    private int meterId;
     private Boolean substitute;
 
-    public DefaultReading(String comment, ICustomer customer, LocalDate dateOfReading, KindOfMeter kindOfMeter, Double meterCount, String meterId, Boolean substitute) {
+    public DefaultReading(UUID id, String comment, ICustomer customer, LocalDate dateOfReading, KindOfMeter kindOfMeter, Double meterCount, int meterId, Boolean substitute) {
+        this.id = id;
         this.comment = comment;
         this.customer = customer;
         this.dateOfReading = dateOfReading;
@@ -75,12 +77,12 @@ public class DefaultReading implements IReading{
     }
 
     @Override
-    public String getMeterId() {
+    public int getMeterId() {
         return meterId;
     }
 
     @Override
-    public void setMeterId(String meterId) {
+    public void setMeterId(int meterId) {
         this.meterId = meterId;
     }
 
@@ -101,11 +103,23 @@ public class DefaultReading implements IReading{
 
     @Override
     public UUID getId() {
-        return null;
+        return id;
     }
 
     @Override
     public void setId(UUID id) {
+        this.id = id;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultReading that)) return false;
+        return meterId == that.meterId && Objects.equals(id, that.id) && Objects.equals(comment, that.comment) && Objects.equals(customer, that.customer) && Objects.equals(dateOfReading, that.dateOfReading) && kindOfMeter == that.kindOfMeter && Objects.equals(meterCount, that.meterCount) && Objects.equals(substitute, that.substitute);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, comment, customer, dateOfReading, kindOfMeter, meterCount, meterId, substitute);
     }
 }
