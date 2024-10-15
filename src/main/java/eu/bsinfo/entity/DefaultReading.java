@@ -13,9 +13,8 @@ public class DefaultReading implements IReading{
     private Double meterCount;
     private String meterId;
     private Boolean substitute;
-    private String printDateOfReading;
 
-    public DefaultReading(String comment, ICustomer customer, LocalDate dateOfReading, KindOfMeter kindOfMeter, Double meterCount, String meterId, Boolean substitute, String printDateOfReading) {
+    public DefaultReading(String comment, ICustomer customer, LocalDate dateOfReading, KindOfMeter kindOfMeter, Double meterCount, String meterId, Boolean substitute) {
         this.comment = comment;
         this.customer = customer;
         this.dateOfReading = dateOfReading;
@@ -23,7 +22,6 @@ public class DefaultReading implements IReading{
         this.meterCount = meterCount;
         this.meterId = meterId;
         this.substitute = substitute;
-        this.printDateOfReading = printDateOfReading;
     }
 
     @Override
@@ -99,14 +97,6 @@ public class DefaultReading implements IReading{
     @Override
     public void setSubstitute(Boolean substitute) {
         this.substitute = substitute;
-    }
-
-    public String getPrintDateOfReading() {
-        return printDateOfReading;
-    }
-
-    public void setPrintDateOfReading(String printDateOfReading) {
-        this.printDateOfReading = printDateOfReading;
     }
 
     @Override

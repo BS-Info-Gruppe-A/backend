@@ -1,7 +1,6 @@
 package eu.bsinfo.database.repository;
 
 import eu.bsinfo.database.DatabaseManager;
-import eu.bsinfo.entity.ICustomer;
 import eu.bsinfo.entity.IReading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +11,7 @@ import java.sql.Types;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ReradingRepository extends Repository<IReading>{
+public class ReadingRepository extends Repository<IReading> {
 
     /**
      * Constructor.
@@ -21,7 +20,7 @@ public class ReradingRepository extends Repository<IReading>{
      *                        for database connections
      * @throws NullPointerException if databaseManager is null
      */
-    public ReradingRepository(@NotNull DatabaseManager databaseManager) {
+    public ReadingRepository(@NotNull DatabaseManager databaseManager) {
         Objects.requireNonNull(databaseManager, "databaseManager cannot be null");
         super(databaseManager);
     }

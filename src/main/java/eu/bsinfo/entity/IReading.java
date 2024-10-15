@@ -51,16 +51,13 @@ public interface IReading extends IId {
      */
     static IReading from(ResultSet resultSet) throws SQLException {
         var comment = resultSet.getString("comment");
-        var customer = resultSet.getObject("customer");
-        var dateOfReading = resultSet.getObject("dateOfReading");
-        var kindOfMeter = resultSet.getObject("kindOfMeter");
-        var meterCount = resultSet.getDouble("meterCount");
-        var meterId = resultSet.getString("meterId");
+        var customer = ICustomer.from(resultSet, "customer_id");
+        var dateOfReading = resultSet.getTimestamp("read_date").toLocalDateTime().toLocalDate();
+        var kindOfMeter = resultSet.getString("meter_type");
+        var meterCount = resultSet.getDouble("meter_count");
+        var meterId = resultSet.getString("meter_id");
         var substitute = resultSet.getBoolean("substitute");
-        var printDateOfReading = resultSet.getString("printDateOfReading");
 
-        //*must be implemented
-        //return new DefaultReading(comment, customer, dateOfReading, kindOfMeter, meterCount, meterId, substitute, printDateOfReading);
-        return null;
+        return new DefaultReading(comment, customer, dateOfReading, KindOfMeter.valueOf(kindOfMeter), meterCount, meterId, substitute);
     }
 }
