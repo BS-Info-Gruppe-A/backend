@@ -7,4 +7,9 @@
             <enabled>false</enabled>
         </remote>
     </buildCache>
+    <buildScan>
+        <publishing>
+            <onlyIf>false</onlyIf>
+        </publishing>
+    </buildScan>
 </develocity>
