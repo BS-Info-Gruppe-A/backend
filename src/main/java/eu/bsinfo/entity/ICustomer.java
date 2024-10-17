@@ -30,27 +30,23 @@ public interface ICustomer extends IId {
 
    void setLastName(String lastName);
 
-   /**
-    * Creates a new {@link ICustomer} from a {@link ResultSet}.
-    * @param resultSet the {@link ResultSet} containing the data
-    * @return the newly created customer
-    * @throws SQLException if an SQL error occurs
-    * @see DefaultCustomer#DefaultCustomer(UUID, LocalDate, String, Gender, String)
-    * @see ICustomer#from(ResultSet)
-    */
+   /// Creates a new [ICustomer] from a [ResultSet].
+   /// @param resultSet the [ResultSet] containing the data
+   /// @return the newly created customer
+   /// @throws SQLException if an SQL error occurs
+   /// @see DefaultCustomer#DefaultCustomer(UUID, LocalDate, String, Gender, String)
+   /// @see ICustomer#from(ResultSet)
    static ICustomer from(ResultSet resultSet) throws SQLException {
       return from(resultSet, "id");
    }
 
-   /**
-    * Creates a new {@link ICustomer} from a {@link ResultSet}.
-    * @param resultSet the {@link ResultSet} containing the data
-    * @param idField the name of the id column in the result set
-    * @return the newly created customer
-    * @throws SQLException if an SQL error occurs
-    * @see DefaultCustomer#DefaultCustomer(UUID, LocalDate, String, Gender, String)
-    * @see ICustomer#from(ResultSet, String)
-    */
+   /// Creates a new [ICustomer] from a [ResultSet].
+   /// @param resultSet the [ResultSet] containing the data
+   /// @param idField the name of the id column in the result set
+   /// @return the newly created customer
+   /// @throws SQLException if an SQL error occurs
+   /// @see DefaultCustomer#DefaultCustomer(UUID, LocalDate, String, Gender, String)
+   /// @see ICustomer#from(ResultSet, String)
    static ICustomer from(ResultSet resultSet, String idField) throws SQLException {
       var dbId = resultSet.getObject(idField, UUID.class);
       var birthDate = resultSet.getTimestamp("birth_date");

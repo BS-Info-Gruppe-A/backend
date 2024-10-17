@@ -11,6 +11,7 @@ import java.sql.Types;
 import java.util.Objects;
 import java.util.UUID;
 
+/// Implementation of [Repository] for the `readings` table.
 public class ReadingRepository extends Repository<IReading> {
 
     /**
@@ -25,8 +26,11 @@ public class ReadingRepository extends Repository<IReading> {
         super(databaseManager);
     }
 
+    /// {@inheritDoc}
+    @Nullable
     @Override
-    public @Nullable IReading findById(@NotNull UUID id) throws SQLException {
+    public IReading findById(@NotNull UUID id) throws SQLException {
+        Objects.requireNonNull(id, "id cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("""
                      SELECT * FROM readings
@@ -44,8 +48,10 @@ public class ReadingRepository extends Repository<IReading> {
         }
     }
 
+    /// {@inheritDoc}
     @Override
     public boolean delete(@NotNull UUID id) throws SQLException {
+        Objects.requireNonNull(id, "id cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("DELETE FROM readings WHERE id = ?")) {
             statement.setObject(1, id);
@@ -54,8 +60,10 @@ public class ReadingRepository extends Repository<IReading> {
         }
     }
 
+    /// {@inheritDoc}
     @Override
     public boolean insert(@NotNull IReading entity) throws SQLException {
+        Objects.requireNonNull(entity, "entity cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("""
                      INSERT INTO readings(id, comment, customer_id, read_date, meter_type, meter_count, meter_id, substitute)
@@ -72,8 +80,10 @@ public class ReadingRepository extends Repository<IReading> {
         }
     }
 
+    /// {@inheritDoc}
     @Override
     public boolean update(@NotNull IReading entity) throws SQLException {
+        Objects.requireNonNull(entity, "entity cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("""
                      UPDATE readings SET comment = ?, customer_id = ?, read_date = ?, meter_type = ?,  meter_count = ?,

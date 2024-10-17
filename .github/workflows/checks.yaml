@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 22
+          java-version: 23
           cache: maven
       - uses: gradle/develocity-actions/maven-setup@v1
       - run: ./mvnw verify

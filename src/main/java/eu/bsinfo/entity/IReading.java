@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface IReading extends IId {
 
     enum KindOfMeter {
-        HEIZUNG, STROM, UNBEKANNT, WASSER;
+        HEIZUNG, STROM, UNBEKANNT, WASSER
     }
 
     String getComment();
@@ -42,13 +42,11 @@ public interface IReading extends IId {
     void setSubstitute(Boolean substitute);
 
 
-    /**
-     * Creates a new {@link IReading} from a {@link ResultSet}
-     *
-     * @param resultSet the {@link ResultSet} containing the data
-     * @return the newly created readings
-     * @throws SQLException if an SQL error occurs
-     */
+    /// Creates a new [IReading] from a [ResultSet]
+    ///
+    /// @param resultSet the [ResultSet] containing the data
+    /// @return the newly created readings
+    /// @throws SQLException if an SQL error occurs
     static IReading from(ResultSet resultSet) throws SQLException {
         var id = resultSet.getObject("id", UUID.class);
         var comment = resultSet.getString("comment");

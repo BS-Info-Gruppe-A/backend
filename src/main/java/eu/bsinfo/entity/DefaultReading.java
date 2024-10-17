@@ -1,6 +1,8 @@
 package eu.bsinfo.entity;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -93,7 +95,7 @@ public class DefaultReading implements IReading{
 
     @Override
     public String printDateOfReading() {
-        return "";
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateOfReading);
     }
 
     @Override

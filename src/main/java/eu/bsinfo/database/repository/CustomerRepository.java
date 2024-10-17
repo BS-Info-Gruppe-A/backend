@@ -11,25 +11,23 @@ import java.sql.Types;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Repository implementation for customers.
- */
+/// [Repository] implementation for `customers` table.
 public class CustomerRepository extends Repository<ICustomer> {
-    /**
-     * Constructor.
-     *
-     * @param databaseManager reference to the {@link DatabaseManager} to use
-     *                        for database connections
-     * @throws NullPointerException if databaseManager is null
-     */
+    /// Constructor.
+    ///
+    /// @param databaseManager reference to the [DatabaseManager] to use
+    ///                        for database connections
+    /// @throws NullPointerException if databaseManager is null
     public CustomerRepository(@NotNull DatabaseManager databaseManager) {
         Objects.requireNonNull(databaseManager, "databaseManager cannot be null");
         super(databaseManager);
     }
 
-    //CRUD Read funktion
+    /// {@inheritDoc}
     @Override
-    public @Nullable ICustomer findById(@NotNull UUID id) throws SQLException {
+    @Nullable
+    public ICustomer findById(@NotNull UUID id) throws SQLException {
+        Objects.requireNonNull(id, "id cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("SELECT * FROM customers WHERE id = ?")) {
             statement.setObject(1, id);
@@ -44,9 +42,10 @@ public class CustomerRepository extends Repository<ICustomer> {
         }
     }
 
-    //CRUD Delete funktion
+    /// {@inheritDoc}
     @Override
     public boolean delete(@NotNull UUID id) throws SQLException {
+        Objects.requireNonNull(id, "id cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("DELETE FROM customers WHERE id = ?")) {
             statement.setObject(1, id);
@@ -54,9 +53,10 @@ public class CustomerRepository extends Repository<ICustomer> {
         }
     }
 
-    //CRUD Create funktion
+    /// {@inheritDoc}
     @Override
     public boolean insert(@NotNull ICustomer entity) throws SQLException {
+        Objects.requireNonNull(entity, "entity cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("""
                      INSERT INTO customers(id, birth_date, first_name, gender, last_name) VALUES (?, ?, ?, ?, ?)""")) {
@@ -70,9 +70,10 @@ public class CustomerRepository extends Repository<ICustomer> {
         }
     }
 
-    //CRUD Update funktion
+    /// {@inheritDoc}
     @Override
     public boolean update(@NotNull ICustomer entity) throws SQLException {
+        Objects.requireNonNull(entity, "entity cannot be null");
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("""
                      UPDATE customers SET birth_date = ?,\
