@@ -67,6 +67,7 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     public void testDelete() throws SQLException {
         var id = UUID.fromString("f889d010-3b3d-4517-9694-df6bcc806fba");
         var foundEntity = getRepository().findById(id);
+        Assertions.assertNotNull(foundEntity, "Entity not found");
         Assertions.assertTrue(getRepository().delete(foundEntity), "Entity delete failed");
         Assertions.assertNull(getRepository().findById(id), "Entity not deleted");
     }
