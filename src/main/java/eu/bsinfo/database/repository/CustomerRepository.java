@@ -5,7 +5,6 @@ import eu.bsinfo.entity.ICustomer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.net.StandardSocketOptions;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;

@@ -40,15 +40,6 @@ public abstract class Repository<T extends IId> {
      /// @return all entities inside a table
     public abstract List<T> getAll() throws SQLException;
 
-    /// Finds an entity by its date and kindOfMeter.
-    /// @param date: the date to search for
-     /// @param kindOfMeter: the kindOfMeter to search to
-     /// @throws SQLException if an SQL error occurs
-     /// @throws NullPointerException if date and kindOfMeter is null
-     /// @return the entity corresponding to the date and KindOfMeter or `null` if none is found
-    public abstract List<IReading> getReadings(LocalDate date, IReading.KindOfMeter kindOfMeter) throws SQLException;
-
-
         /// Delete an entity by its id.
         ///
         /// @param id the id of the entity to delete
