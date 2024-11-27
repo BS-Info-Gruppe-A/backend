@@ -81,4 +81,16 @@ public class DefaultCustomer implements ICustomer {
     public int hashCode() {
         return Objects.hash(id, birthDate, firstName, gender, lastName);
     }
+
+
+    @Override
+    public String toString() {
+        return "DefaultCustomer{" +
+                "id=" + id +
+                ", birthDate=" + birthDate +
+                ", firstName='" + firstName + '\'' +
+                ", gender=" + gender +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

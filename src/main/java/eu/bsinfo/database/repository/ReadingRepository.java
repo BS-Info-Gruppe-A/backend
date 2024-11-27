@@ -1,6 +1,7 @@
 package eu.bsinfo.database.repository;
 
 import eu.bsinfo.database.DatabaseManager;
+import eu.bsinfo.entity.ICustomer;
 import eu.bsinfo.entity.IReading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -46,6 +50,46 @@ public class ReadingRepository extends Repository<IReading> {
                 }
             }
         }
+    }
+    /// {@inheritDoc}
+    @Override
+    public List<IReading> getAll() throws SQLException {
+        var output = new ArrayList<IReading>();
+        try (var connection = databaseManager.getConnection();
+             var statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM readings
+                    JOIN customers c ON c.id = readings.customer_id;
+                     """)) {
+            try (var resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    output.add(IReading.from(resultSet));
+                }
+            }
+        }
+        return output;
+    }
+
+    /// {@inheritDoc}
+    @Nullable
+    @Override
+    public List<IReading> getReadings(LocalDate date, IReading.KindOfMeter kindOfMeter) throws SQLException {
+        Objects.requireNonNull(date, "date cannot be null");
+        Objects.requireNonNull(kindOfMeter, "id cannot be null");
+        var output = new ArrayList<IReading>();
+        try (var connection = databaseManager.getConnection();
+             var statement = connection.prepareStatement("""
+                    SELECT *
+                    FROM readings
+                    JOIN customers c ON c.id = readings.customer_id;
+                     """)) {
+            try (var resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    output.add(IReading.from(resultSet));
+                }
+            }
+        }
+        return output;
     }
 
     /// {@inheritDoc}

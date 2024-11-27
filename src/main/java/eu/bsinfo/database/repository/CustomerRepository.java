@@ -5,9 +5,12 @@ import eu.bsinfo.entity.ICustomer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.StandardSocketOptions;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -40,6 +43,20 @@ public class CustomerRepository extends Repository<ICustomer> {
             }
 
         }
+    }
+    /// {@inheritDoc}
+    @Override
+    public List<ICustomer> getAll() throws SQLException {
+        var output = new ArrayList<ICustomer>();
+        try (var connection = databaseManager.getConnection();
+             var statement = connection.prepareStatement("SELECT * FROM customers")) {
+            try (var resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    output.add(ICustomer.from(resultSet));
+                }
+            }
+        }
+        return output;
     }
 
     /// {@inheritDoc}

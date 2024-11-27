@@ -1,11 +1,15 @@
 package eu.bsinfo.database.repository;
 
 import eu.bsinfo.database.DatabaseManager;
+import eu.bsinfo.entity.ICustomer;
 import eu.bsinfo.entity.IId;
+import eu.bsinfo.entity.IReading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,12 +35,26 @@ public abstract class Repository<T extends IId> {
     @Nullable
     public abstract T findById(@NotNull UUID id) throws SQLException;
 
-    /// Delete an entity by its id.
-    ///
-    /// @param id the id of the entity to delete
-    /// @throws SQLException         if an SQL error occurs
-    /// @throws NullPointerException if entity is null
-    /// @return whether an entity was deleted or not
+    /// Gives all entities.
+     /// @throws SQLException if an SQL error occurs
+     /// @return all entities inside a table
+    public abstract List<T> getAll() throws SQLException;
+
+    /// Finds an entity by its date and kindOfMeter.
+    /// @param date: the date to search for
+     /// @param kindOfMeter: the kindOfMeter to search to
+     /// @throws SQLException if an SQL error occurs
+     /// @throws NullPointerException if date and kindOfMeter is null
+     /// @return the entity corresponding to the date and KindOfMeter or `null` if none is found
+    public abstract List<IReading> getReadings(LocalDate date, IReading.KindOfMeter kindOfMeter) throws SQLException;
+
+
+        /// Delete an entity by its id.
+        ///
+        /// @param id the id of the entity to delete
+        /// @throws SQLException         if an SQL error occurs
+        /// @throws NullPointerException if entity is null
+        /// @return whether an entity was deleted or not
     public abstract boolean delete(@NotNull UUID id) throws SQLException;
 
     /// Deletes an entity from the database.

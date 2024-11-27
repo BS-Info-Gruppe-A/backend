@@ -124,4 +124,18 @@ public class DefaultReading implements IReading{
     public int hashCode() {
         return Objects.hash(id, comment, customer, dateOfReading, kindOfMeter, meterCount, meterId, substitute);
     }
+
+    @Override
+    public String toString() {
+        return "DefaultReading{" +
+                "id=" + id +
+                ", comment='" + comment + '\'' +
+                ", customer=" + customer +
+                ", dateOfReading=" + dateOfReading +
+                ", kindOfMeter=" + kindOfMeter +
+                ", meterCount=" + meterCount +
+                ", meterId=" + meterId +
+                ", substitute=" + substitute +
+                '}';
+    }
 }
