@@ -1,5 +1,7 @@
 package eu.bsinfo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -13,6 +15,7 @@ public class DefaultReading implements IReading{
     private ICustomer customer;
     private LocalDate dateOfReading;
     private KindOfMeter kindOfMeter;
+    @JsonProperty("metercount")
     private Double meterCount;
     private int meterId;
     private Boolean substitute;
