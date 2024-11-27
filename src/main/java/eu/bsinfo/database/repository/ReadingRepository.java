@@ -70,9 +70,13 @@ public class ReadingRepository extends Repository<IReading> {
         return output;
     }
 
-    /// {@inheritDoc}
+    /// Finds an entity by its date and kindOfMeter.
+    /// @param date: the date to search for
+    /// @param kindOfMeter: the kindOfMeter to search to
+    /// @throws SQLException if an SQL error occurs
+    /// @throws NullPointerException if date and kindOfMeter is null
+    /// @return the entity corresponding to the date and KindOfMeter or `null` if none is found
     @Nullable
-    @Override
     public List<IReading> getReadings(LocalDate date, IReading.KindOfMeter kindOfMeter) throws SQLException {
         Objects.requireNonNull(date, "date cannot be null");
         Objects.requireNonNull(kindOfMeter, "id cannot be null");
@@ -82,7 +86,7 @@ public class ReadingRepository extends Repository<IReading> {
                     SELECT *
                     FROM readings
                     JOIN customers c ON c.id = readings.customer_id;
-                     """)) {
+                    """)) {
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     output.add(IReading.from(resultSet));

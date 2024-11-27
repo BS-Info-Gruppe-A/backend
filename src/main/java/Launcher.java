@@ -15,11 +15,4 @@ void main() throws IOException {
     var databaseConfig = Config.fromDefault();
     var databaseManager = new DatabaseManager(databaseConfig.url(), databaseConfig.username(), databaseConfig.password());
     new Backend(databaseManager);
-    CustomerRepository repo = new CustomerRepository(databaseManager);
-    try {
-        var test = repo.getAll();
-        logger.info("result was {}",test);
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    }
 }

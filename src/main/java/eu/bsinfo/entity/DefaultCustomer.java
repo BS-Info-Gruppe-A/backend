@@ -1,18 +1,27 @@
 package eu.bsinfo.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
 public class DefaultCustomer implements ICustomer {
 
+    @JsonProperty(required = true)
     private UUID id;
+    @JsonProperty(required = true)
     private LocalDate birthDate;
+    @JsonProperty(required = true)
     private String firstName;
+    @JsonProperty(required = true)
     private Gender gender;
+    @JsonProperty(required = true)
     private String lastName;
 
-    public DefaultCustomer(UUID id, LocalDate birthDate, String firstName, Gender gender, String lastName) {
+    @JsonCreator
+    public DefaultCustomer(@JsonProperty("id") UUID id, @JsonProperty("birthDate") LocalDate birthDate, @JsonProperty("firstName") String firstName, @JsonProperty("gender") Gender gender, @JsonProperty("lastName") String lastName) {
         this.id = id;
         this.birthDate = birthDate;
         this.firstName = firstName;

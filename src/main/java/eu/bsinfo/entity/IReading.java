@@ -1,10 +1,13 @@
 package eu.bsinfo.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@JsonDeserialize(as = DefaultReading.class)
 public interface IReading extends IId {
 
     enum KindOfMeter {
