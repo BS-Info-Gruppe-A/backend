@@ -2,6 +2,8 @@ package eu.bsinfo.rest;
 
 import eu.bsinfo.Backend;
 import eu.bsinfo.entity.ICustomer;
+import eu.bsinfo.entity.IReading;
+import eu.bsinfo.rest.objects.CustomerWithReadings;
 import eu.bsinfo.rest.objects.Customers;
 import eu.bsinfo.rest.objects.UpdatableCustomer;
 import jakarta.ws.rs.*;
@@ -9,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 @Path("/customers")
@@ -67,5 +70,20 @@ public class CustomerService {
         } else {
             return customer;
         }
+    }
+
+    @Path("/{userId}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public CustomerWithReadings deleteById(@PathParam("userId") UUID userId) throws SQLException {
+        var customerToDelete = Backend.getInstance().getCustomerRepository().findById(userId);
+        if (customerToDelete == null) {
+            throw new NotFoundException();
+        }
+        // TODO: implement readings
+        List<IReading> readings = List.of();
+
+        Backend.getInstance().getCustomerRepository().delete(customerToDelete);
+        return new CustomerWithReadings(customerToDelete, readings);
     }
 }
