@@ -142,21 +142,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.3.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <toolchain>jdk</toolchain>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>--enable-preview</argument>
-                        <argument>-classpath</argument>
-                        <classpath/>
-                        <argument>Launcher</argument>
-                    </arguments>
-                </configuration>
-            </plugin>            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.21.0</version>
