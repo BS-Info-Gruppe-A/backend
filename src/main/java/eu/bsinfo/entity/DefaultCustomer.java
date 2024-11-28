@@ -35,23 +35,13 @@ public class DefaultCustomer implements ICustomer {
     }
 
     @Override
-    public String getFirstName() {
-        return firstName;
-    }
-
-    @Override
-    public Gender getGender() {
-        return gender;
-    }
-
-    @Override
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public String getFirstName() {
+        return firstName;
     }
 
     @Override
@@ -60,8 +50,18 @@ public class DefaultCustomer implements ICustomer {
     }
 
     @Override
+    public Gender getGender() {
+        return gender;
+    }
+
+    @Override
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
     }
 
     @Override

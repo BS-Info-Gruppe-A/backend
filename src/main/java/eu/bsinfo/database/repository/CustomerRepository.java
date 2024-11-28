@@ -18,7 +18,7 @@ public class CustomerRepository extends Repository<ICustomer> {
     /// Constructor.
     ///
     /// @param databaseManager reference to the [DatabaseManager] to use
-    ///                        for database connections
+    ///                                               for database connections
     /// @throws NullPointerException if databaseManager is null
     public CustomerRepository(@NotNull DatabaseManager databaseManager) {
         Objects.requireNonNull(databaseManager, "databaseManager cannot be null");
@@ -43,6 +43,7 @@ public class CustomerRepository extends Repository<ICustomer> {
 
         }
     }
+
     /// {@inheritDoc}
     @Override
     public List<ICustomer> getAll() throws SQLException {

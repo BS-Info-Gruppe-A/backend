@@ -13,14 +13,6 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     protected static PostgreSQLContainer<?> psql = new PostgreSQLContainer<>("postgres:latest")
             .withInitScripts("schema.sql", "seed.sql");
 
-    protected abstract Repository<T> getRepository();
-    protected abstract T newEntity(UUID id);
-    protected abstract void mutateEntity(@NotNull T entity);
-
-    protected DatabaseManager getDatabaseManager() {
-        return new DatabaseManager(psql.getJdbcUrl(), psql.getUsername(), psql.getPassword(), 1);
-    }
-
     @BeforeAll
     public static void beforeAll() {
         psql.start();
@@ -29,6 +21,16 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     @AfterAll
     public static void afterAll() {
         psql.stop();
+    }
+
+    protected abstract Repository<T> getRepository();
+
+    protected abstract T newEntity(UUID id);
+
+    protected abstract void mutateEntity(@NotNull T entity);
+
+    protected DatabaseManager getDatabaseManager() {
+        return new DatabaseManager(psql.getJdbcUrl(), psql.getUsername(), psql.getPassword(), 1);
     }
 
     @Test

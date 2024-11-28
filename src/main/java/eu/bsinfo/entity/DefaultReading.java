@@ -8,7 +8,7 @@ import java.time.format.FormatStyle;
 import java.util.Objects;
 import java.util.UUID;
 
-public class DefaultReading implements IReading{
+public class DefaultReading implements IReading {
 
     private UUID id;
     private String comment;
@@ -32,9 +32,9 @@ public class DefaultReading implements IReading{
     }
 
     @Override
-    public String getComment(){
+    public String getComment() {
         return comment;
-        }
+    }
 
     @Override
     public void setComment(String comment) {
@@ -97,13 +97,13 @@ public class DefaultReading implements IReading{
     }
 
     @Override
-    public String printDateOfReading() {
-        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateOfReading);
+    public void setSubstitute(Boolean substitute) {
+        this.substitute = substitute;
     }
 
     @Override
-    public void setSubstitute(Boolean substitute) {
-        this.substitute = substitute;
+    public String printDateOfReading() {
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateOfReading);
     }
 
     @Override

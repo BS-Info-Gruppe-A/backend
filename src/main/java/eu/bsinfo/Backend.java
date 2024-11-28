@@ -14,11 +14,11 @@ import java.net.URI;
 import java.util.Objects;
 
 public class Backend {
+    private static Backend instance;
     private final DatabaseManager databaseManager;
     private final HttpServer server;
     private final CustomerRepository customerRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private static Backend instance;
 
     public Backend(@NotNull DatabaseManager databaseManager) {
         Objects.requireNonNull(databaseManager, "databaseManager cannot be null");
@@ -33,6 +33,10 @@ public class Backend {
         instance = this;
     }
 
+    public static Backend getInstance() {
+        return instance;
+    }
+
     @NotNull
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
@@ -44,9 +48,5 @@ public class Backend {
 
     public HttpServer getServer() {
         return server;
-    }
-
-    public static Backend getInstance() {
-        return instance;
     }
 }

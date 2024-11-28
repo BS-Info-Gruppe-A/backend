@@ -18,7 +18,7 @@ CREATE TYPE MeterType AS ENUM ('HEIZUNG','STROM','WASSER','UNBEKANNT');
 
 CREATE TABLE readings
 (
-    id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id uuid NULL REFERENCES customers (id) ON DELETE SET NULL,
     read_date   TIMESTAMP,
     meter_id    INT,

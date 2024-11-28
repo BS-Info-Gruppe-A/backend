@@ -10,4 +10,5 @@ public record UpdatableCustomer(
         String firstName,
         String lastName,
         ICustomer.Gender gender
-) { }
+) {
+}

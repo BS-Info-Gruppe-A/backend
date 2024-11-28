@@ -55,16 +55,17 @@ public class ReadingRepository extends Repository<IReading> {
             }
         }
     }
+
     /// {@inheritDoc}
     @Override
     public List<IReading> getAll() throws SQLException {
         var output = new ArrayList<IReading>();
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("""
-                    SELECT *
-                    FROM readings
-                    JOIN customers c ON c.id = readings.customer_id;
-                    """)) {
+                     SELECT *
+                     FROM readings
+                     JOIN customers c ON c.id = readings.customer_id;
+                     """)) {
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     output.add(IReading.from(resultSet));
@@ -75,12 +76,13 @@ public class ReadingRepository extends Repository<IReading> {
     }
 
     /// Finds an entity by its date and kindOfMeter.
-    /// @param startDate: the date to search for
-     /// @param endDate: the date to search for
-     /// @param kindOfMeter: the kindOfMeter to search to
-     /// @throws SQLException if an SQL error occurs
-     /// @throws NullPointerException if date and kindOfMeter is null
-     /// @return the entity corresponding to the date and KindOfMeter or all Readings if none is found
+    ///
+    /// @param startDate:   the date to search for
+    /// @param endDate:     the date to search for
+    /// @param kindOfMeter: the kindOfMeter to search to
+    /// @return the entity corresponding to the date and KindOfMeter or all Readings if none is found
+    /// @throws SQLException         if an SQL error occurs
+    /// @throws NullPointerException if date and kindOfMeter is null
     public List<IReading> getReadings(LocalDate startDate, LocalDate endDate, IReading.KindOfMeter kindOfMeter) throws SQLException {
         String sqlStatement = "SELECT * FROM readings JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ? ";
         PreparedStatement statement = null;
@@ -90,18 +92,18 @@ public class ReadingRepository extends Repository<IReading> {
                 startDate = LocalDate.of(1, 1, 1);
                 endDate = LocalDate.now();
             }
-                if(kindOfMeter != null){
-                    sqlStatement += "AND readings.meter_type = ?;";
-                    statement = connection.prepareStatement(sqlStatement);
-                    statement.setObject(1, startDate);
-                    statement.setObject(2, endDate);
-                    statement.setObject(3, kindOfMeter, Types.OTHER);
-                }else{
-                    sqlStatement += ";";
-                    statement = connection.prepareStatement(sqlStatement);
-                    statement.setObject(1, startDate);
-                    statement.setObject(2, endDate);
-                }
+            if (kindOfMeter != null) {
+                sqlStatement += "AND readings.meter_type = ?;";
+                statement = connection.prepareStatement(sqlStatement);
+                statement.setObject(1, startDate);
+                statement.setObject(2, endDate);
+                statement.setObject(3, kindOfMeter, Types.OTHER);
+            } else {
+                sqlStatement += ";";
+                statement = connection.prepareStatement(sqlStatement);
+                statement.setObject(1, startDate);
+                statement.setObject(2, endDate);
+            }
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     output.add(IReading.from(resultSet));
@@ -109,7 +111,7 @@ public class ReadingRepository extends Repository<IReading> {
                 return output;
             }
         } catch (Exception e) {
-            log.error("failed to execute Sql statement: [{}]",statement);
+            log.error("failed to execute Sql statement: [{}]", statement);
             throw new RuntimeException(e);
         }
     }
