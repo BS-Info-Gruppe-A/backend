@@ -2,10 +2,11 @@ package eu.bsinfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sun.net.httpserver.HttpServer;
 import eu.bsinfo.database.DatabaseManager;
 import eu.bsinfo.database.repository.CustomerRepository;
-import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,7 @@ public class Backend {
     private final DatabaseManager databaseManager;
     private final HttpServer server;
     private final CustomerRepository customerRepository;
-    private final ObjectMapper objectMapper= new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private static Backend instance;
 
     public Backend(@NotNull DatabaseManager databaseManager) {
@@ -25,9 +26,10 @@ public class Backend {
 
         this.databaseManager = databaseManager;
         this.customerRepository = new CustomerRepository(databaseManager);
-        final var config = new ResourceConfig().packages("eu.bsinfo.rest");
-        this.server = JdkHttpServerFactory
-                .createHttpServer(URI.create("http://localhost:8081/"), config);
+        final var config = new ResourceConfig().packages("eu.bsinfo.rest")
+                .property(CommonProperties.USE_VIRTUAL_THREADS, true);
+        server = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://localhost:8080"), config, false);
+
         instance = this;
     }
 
@@ -38,6 +40,10 @@ public class Backend {
 
     public CustomerRepository getCustomerRepository() {
         return customerRepository;
+    }
+
+    public HttpServer getServer() {
+        return server;
     }
 
     public static Backend getInstance() {
