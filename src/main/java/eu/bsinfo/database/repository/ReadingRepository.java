@@ -76,15 +76,21 @@ public class ReadingRepository extends Repository<IReading> {
     /// @param startDate   the date to search for (inclusive)
     /// @param endDate     the date to search for (inclusive)
     /// @param kindOfMeter the kindOfMeter to search to
+    /// @param customerId  the id of the customer owning the reading
     /// @return the entity corresponding to the date and KindOfMeter or all Readings if none is found
     /// @throws SQLException         if an SQL error occurs
     /// @throws NullPointerException if date and kindOfMeter is null
-    public List<IReading> getReadings(LocalDate startDate, LocalDate endDate, IReading.KindOfMeter kindOfMeter) throws SQLException {
+    public List<IReading> getReadings(LocalDate startDate, LocalDate endDate, IReading.KindOfMeter kindOfMeter, UUID customerId) throws SQLException {
         var sqlStatement = new StringBuilder("SELECT * FROM readings JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ?");
         var output = new ArrayList<IReading>();
         var safeStartDate = Optional.ofNullable(startDate).orElse(LocalDate.MIN);
         var safeEndDate = Optional.ofNullable(endDate).orElse(LocalDate.MAX);
+
         try (var connection = databaseManager.getConnection()) {
+            if (customerId != null) {
+                sqlStatement.append(' ');
+                sqlStatement.append("AND readings.customer_id = ?");
+            }
             if (kindOfMeter != null) {
                 sqlStatement.append(' '); // Ad space between previous statement and new statement
                 sqlStatement.append("AND readings.meter_type = ?;");
@@ -92,10 +98,14 @@ public class ReadingRepository extends Repository<IReading> {
                 sqlStatement.append(';');
             }
             var statement = connection.prepareStatement(sqlStatement.toString());
-            statement.setObject(1, safeStartDate);
-            statement.setObject(2, safeEndDate);
+            var parameterIndex = 0;
+            statement.setObject(++parameterIndex, safeStartDate);
+            statement.setObject(++parameterIndex, safeEndDate);
+            if (customerId != null) {
+                statement.setObject(++parameterIndex, customerId);
+            }
             if (kindOfMeter != null) {
-                statement.setObject(3, kindOfMeter, Types.OTHER);
+                statement.setObject(++parameterIndex, kindOfMeter, Types.OTHER);
             }
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {

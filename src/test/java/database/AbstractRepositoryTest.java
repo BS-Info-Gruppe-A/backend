@@ -1,18 +1,23 @@
+package database;
+
 import eu.bsinfo.database.DatabaseManager;
 import eu.bsinfo.database.repository.Repository;
 import eu.bsinfo.entity.IId;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.sql.SQLException;
 import java.util.UUID;
 
+@Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class AbstractRepositoryTest<T extends IId> {
-    @SuppressWarnings("resource") // closed by afterAll()
-    protected static PostgreSQLContainer<?> psql = new PostgreSQLContainer<>("postgres:latest")
-            .withInitScripts("schema.sql", "seed.sql");
+
+    @Container
+    protected static PostgreSQLContainer<?> psql = TestDatabaseUtil.createTestDatabase();
 
     @BeforeAll
     public static void beforeAll() {

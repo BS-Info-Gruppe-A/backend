@@ -1,3 +1,5 @@
+package database;
+
 import eu.bsinfo.database.repository.CustomerRepository;
 import eu.bsinfo.database.repository.Repository;
 import eu.bsinfo.entity.DefaultCustomer;

@@ -26,7 +26,7 @@ public class CustomerService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response upsertCustomer(ICustomer customer) throws SQLException {
+    public Response createCustomer(ICustomer customer) throws SQLException {
         if (Backend.getInstance().getCustomerRepository().findById(customer.getId()) != null) {
             return Response.status(Response.Status.CONFLICT).entity("ID already in use").build();
         }
@@ -51,7 +51,7 @@ public class CustomerService {
             currentCustomer.setFirstName(customer.firstName());
         }
         if (customer.lastName() != null) {
-            currentCustomer.setFirstName(customer.lastName());
+            currentCustomer.setLastName(customer.lastName());
         }
 
         Backend.getInstance().getCustomerRepository().update(currentCustomer);
@@ -80,8 +80,8 @@ public class CustomerService {
         if (customerToDelete == null) {
             throw new NotFoundException();
         }
-        // TODO: implement readings
-        List<IReading> readings = List.of();
+
+        List<IReading> readings = Backend.getInstance().getReadingRepository().getReadings(null, null, null, userId);
 
         Backend.getInstance().getCustomerRepository().delete(customerToDelete);
         return new CustomerWithReadings(customerToDelete, readings);
