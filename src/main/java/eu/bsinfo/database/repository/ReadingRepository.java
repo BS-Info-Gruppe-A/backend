@@ -1,11 +1,13 @@
 package eu.bsinfo.database.repository;
 
 import eu.bsinfo.database.DatabaseManager;
-import eu.bsinfo.entity.ICustomer;
 import eu.bsinfo.entity.IReading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
@@ -17,6 +19,8 @@ import java.util.UUID;
 
 /// Implementation of [Repository] for the `readings` table.
 public class ReadingRepository extends Repository<IReading> {
+
+    private static final Logger log = LoggerFactory.getLogger(ReadingRepository.class);
 
     /**
      * Constructor.
@@ -60,7 +64,7 @@ public class ReadingRepository extends Repository<IReading> {
                     SELECT *
                     FROM readings
                     JOIN customers c ON c.id = readings.customer_id;
-                     """)) {
+                    """)) {
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     output.add(IReading.from(resultSet));
@@ -71,29 +75,43 @@ public class ReadingRepository extends Repository<IReading> {
     }
 
     /// Finds an entity by its date and kindOfMeter.
-    /// @param date: the date to search for
-    /// @param kindOfMeter: the kindOfMeter to search to
-    /// @throws SQLException if an SQL error occurs
-    /// @throws NullPointerException if date and kindOfMeter is null
-    /// @return the entity corresponding to the date and KindOfMeter or `null` if none is found
-    @Nullable
-    public List<IReading> getReadings(LocalDate date, IReading.KindOfMeter kindOfMeter) throws SQLException {
-        Objects.requireNonNull(date, "date cannot be null");
-        Objects.requireNonNull(kindOfMeter, "id cannot be null");
+    /// @param startDate: the date to search for
+     /// @param endDate: the date to search for
+     /// @param kindOfMeter: the kindOfMeter to search to
+     /// @throws SQLException if an SQL error occurs
+     /// @throws NullPointerException if date and kindOfMeter is null
+     /// @return the entity corresponding to the date and KindOfMeter or all Readings if none is found
+    public List<IReading> getReadings(LocalDate startDate, LocalDate endDate, IReading.KindOfMeter kindOfMeter) throws SQLException {
+        String sqlStatement = "SELECT * FROM readings JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ? ";
+        PreparedStatement statement = null;
         var output = new ArrayList<IReading>();
-        try (var connection = databaseManager.getConnection();
-             var statement = connection.prepareStatement("""
-                    SELECT *
-                    FROM readings
-                    JOIN customers c ON c.id = readings.customer_id;
-                    """)) {
+        try (var connection = databaseManager.getConnection()) {
+            if (startDate == null || endDate == null) {
+                startDate = LocalDate.of(1, 1, 1);
+                endDate = LocalDate.now();
+            }
+                if(kindOfMeter != null){
+                    sqlStatement += "AND readings.meter_type = ?;";
+                    statement = connection.prepareStatement(sqlStatement);
+                    statement.setObject(1, startDate);
+                    statement.setObject(2, endDate);
+                    statement.setObject(3, kindOfMeter, Types.OTHER);
+                }else{
+                    sqlStatement += ";";
+                    statement = connection.prepareStatement(sqlStatement);
+                    statement.setObject(1, startDate);
+                    statement.setObject(2, endDate);
+                }
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     output.add(IReading.from(resultSet));
                 }
+                return output;
             }
+        } catch (Exception e) {
+            log.error("failed to execute Sql statement: [{}]",statement);
+            throw new RuntimeException(e);
         }
-        return output;
     }
 
     /// {@inheritDoc}
