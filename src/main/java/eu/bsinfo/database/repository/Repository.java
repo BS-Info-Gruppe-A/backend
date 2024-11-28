@@ -39,6 +39,7 @@ public abstract class Repository<T extends IId> {
     ///
     /// @return all entities inside a table
     /// @throws SQLException if an SQL error occurs
+    @NotNull
     public abstract List<T> getAll() throws SQLException;
 
     /// Delete an entity by its id.

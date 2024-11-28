@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
+/// Implementation of [ExceptionMapper] returning `400` on [JsonProcessingExceptions][JsonProcessingException].
 @Provider
 public class JsonErrorHandler implements ExceptionMapper<JsonProcessingException> {
     @Override

@@ -9,6 +9,8 @@ import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonP
 
 import java.text.SimpleDateFormat;
 
+/// Provider for a [org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JsonMapperConfigurator]
+/// using an [ObjectMapper] with a custom date format.
 @Produces(MediaType.APPLICATION_JSON)
 @Provider
 public class JsonSerializer extends JacksonJaxbJsonProvider {

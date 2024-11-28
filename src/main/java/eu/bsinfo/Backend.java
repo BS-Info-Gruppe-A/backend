@@ -21,12 +21,12 @@ public class Backend {
     private final HttpServer server;
     private final CustomerRepository customerRepository;
     private final ReadingRepository readingRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private final ResourceConfig application = new ResourceConfig().packages("eu.bsinfo.rest")
             .property(CommonProperties.USE_VIRTUAL_THREADS, true);
 
     public Backend(@NotNull DatabaseManager databaseManager) {
         Objects.requireNonNull(databaseManager, "databaseManager cannot be null");
+        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
         this.databaseManager = databaseManager;

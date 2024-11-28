@@ -53,6 +53,7 @@ public class ReadingRepository extends Repository<IReading> {
     }
 
     /// {@inheritDoc}
+    @NotNull
     @Override
     public List<IReading> getAll() throws SQLException {
         var output = new ArrayList<IReading>();
@@ -80,7 +81,7 @@ public class ReadingRepository extends Repository<IReading> {
     /// @return the entity corresponding to the date and KindOfMeter or all Readings if none is found
     /// @throws SQLException         if an SQL error occurs
     /// @throws NullPointerException if date and kindOfMeter is null
-    public List<IReading> getReadings(LocalDate startDate, LocalDate endDate, IReading.KindOfMeter kindOfMeter, UUID customerId) throws SQLException {
+    public List<IReading> getReadings(@Nullable LocalDate startDate, @Nullable LocalDate endDate, @Nullable IReading.KindOfMeter kindOfMeter, @Nullable UUID customerId) throws SQLException {
         var sqlStatement = new StringBuilder("SELECT * FROM readings JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ?");
         var output = new ArrayList<IReading>();
         var safeStartDate = Optional.ofNullable(startDate).orElse(LocalDate.MIN);

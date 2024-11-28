@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+/// Default implementation of [ICustomer].
+/// @see ICustomer
 public class DefaultCustomer implements ICustomer {
 
     @JsonProperty(required = true)
@@ -20,6 +22,7 @@ public class DefaultCustomer implements ICustomer {
     @JsonProperty(required = true)
     private String lastName;
 
+    /// Constructor of [ICustomer].
     @JsonCreator
     public DefaultCustomer(@JsonProperty("id") UUID id, @JsonProperty("birthDate") LocalDate birthDate, @JsonProperty("firstName") String firstName, @JsonProperty("gender") Gender gender, @JsonProperty("lastName") String lastName) {
         this.id = id;
