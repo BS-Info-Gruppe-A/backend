@@ -7,15 +7,11 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /// Implementation of [Repository] for the `readings` table.
 public class ReadingRepository extends Repository<IReading> {
@@ -77,32 +73,29 @@ public class ReadingRepository extends Repository<IReading> {
 
     /// Finds an entity by its date and kindOfMeter.
     ///
-    /// @param startDate:   the date to search for
-    /// @param endDate:     the date to search for
-    /// @param kindOfMeter: the kindOfMeter to search to
+    /// @param startDate   the date to search for (inclusive)
+    /// @param endDate     the date to search for (inclusive)
+    /// @param kindOfMeter the kindOfMeter to search to
     /// @return the entity corresponding to the date and KindOfMeter or all Readings if none is found
     /// @throws SQLException         if an SQL error occurs
     /// @throws NullPointerException if date and kindOfMeter is null
     public List<IReading> getReadings(LocalDate startDate, LocalDate endDate, IReading.KindOfMeter kindOfMeter) throws SQLException {
-        String sqlStatement = "SELECT * FROM readings JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ? ";
-        PreparedStatement statement = null;
+        var sqlStatement = new StringBuilder("SELECT * FROM readings JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ?");
         var output = new ArrayList<IReading>();
+        var safeStartDate = Optional.ofNullable(startDate).orElse(LocalDate.MIN);
+        var safeEndDate = Optional.ofNullable(endDate).orElse(LocalDate.MAX);
         try (var connection = databaseManager.getConnection()) {
-            if (startDate == null || endDate == null) {
-                startDate = LocalDate.of(1, 1, 1);
-                endDate = LocalDate.now();
-            }
             if (kindOfMeter != null) {
-                sqlStatement += "AND readings.meter_type = ?;";
-                statement = connection.prepareStatement(sqlStatement);
-                statement.setObject(1, startDate);
-                statement.setObject(2, endDate);
-                statement.setObject(3, kindOfMeter, Types.OTHER);
+                sqlStatement.append(' '); // Ad space between previous statement and new statement
+                sqlStatement.append("AND readings.meter_type = ?;");
             } else {
-                sqlStatement += ";";
-                statement = connection.prepareStatement(sqlStatement);
-                statement.setObject(1, startDate);
-                statement.setObject(2, endDate);
+                sqlStatement.append(';');
+            }
+            var statement = connection.prepareStatement(sqlStatement.toString());
+            statement.setObject(1, safeStartDate);
+            statement.setObject(2, safeEndDate);
+            if (kindOfMeter != null) {
+                statement.setObject(3, kindOfMeter, Types.OTHER);
             }
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -110,9 +103,6 @@ public class ReadingRepository extends Repository<IReading> {
                 }
                 return output;
             }
-        } catch (Exception e) {
-            log.error("failed to execute Sql statement: [{}]", statement);
-            throw new RuntimeException(e);
         }
     }
 

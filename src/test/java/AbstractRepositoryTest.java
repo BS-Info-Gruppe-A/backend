@@ -8,6 +8,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import java.sql.SQLException;
 import java.util.UUID;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class AbstractRepositoryTest<T extends IId> {
     @SuppressWarnings("resource") // closed by afterAll()
     protected static PostgreSQLContainer<?> psql = new PostgreSQLContainer<>("postgres:latest")
@@ -28,6 +29,8 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     protected abstract T newEntity(UUID id);
 
     protected abstract void mutateEntity(@NotNull T entity);
+
+    protected abstract int getSeedCount();
 
     protected DatabaseManager getDatabaseManager() {
         return new DatabaseManager(psql.getJdbcUrl(), psql.getUsername(), psql.getPassword(), 1);
@@ -65,7 +68,16 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     }
 
     @Test
-    @Order(5)
+    @Order(3)
+    public void testGetAll() throws SQLException {
+        var found = getRepository().getAll();
+
+        // +1 since testInsert() inserts a new one
+        Assertions.assertSame(getSeedCount() + 1, found.size(), "Found invalid amount of entities");
+    }
+
+    @Test
+    @Order(Integer.MAX_VALUE) // Use max_value here so we can't schedule any test after this by accident
     public void testDelete() throws SQLException {
         var id = UUID.fromString("f889d010-3b3d-4517-9694-df6bcc806fba");
         var foundEntity = getRepository().findById(id);

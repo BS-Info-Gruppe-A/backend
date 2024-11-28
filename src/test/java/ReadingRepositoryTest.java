@@ -20,7 +20,7 @@ public class ReadingRepositoryTest extends AbstractRepositoryTest<IReading> {
     protected IReading newEntity(UUID id) {
         var customer = CustomerRepositoryTest.getDefaultCustomer(UUID.fromString("0e6cf4ab-ec75-4922-80f2-9e4e23d06ad5"));
 
-        return new DefaultReading(id, " testComment", customer, LocalDate.now(), IReading.KindOfMeter.valueOf("WASSER"), 67.00, 1337, true);
+        return new DefaultReading(id, "Gatschonga", customer, LocalDate.ofEpochDay(1), IReading.KindOfMeter.valueOf("WASSER"), 67.00, 1337, true);
     }
 
     @Override
@@ -28,13 +28,49 @@ public class ReadingRepositoryTest extends AbstractRepositoryTest<IReading> {
         entity.setComment("test2Comment");
     }
 
-    @Test
-    @Order(4)
-    public void testGetReadings() throws SQLException {
-        var id = UUID.fromString("f0d02fd0-01a7-49d1-b4e2-dab9e9cafe76");
-        var foundEntity = getRepository().findById(id);
-        Assertions.assertNotNull(getRepository().getReadings(null, null, IReading.KindOfMeter.WASSER), "Entity not found");
+    @Override
+    protected int getSeedCount() {
+        return 3;
     }
 
-}
+    @Test
+    @Order(4)
+    public void testGetByKindOfMeter() throws SQLException {
+        var id = UUID.fromString("92dad020-b9ac-4e6b-9b15-a02128ce2bce");
+        var foundEntity = getRepository().getReadings(null, null, IReading.KindOfMeter.HEIZUNG);
 
+        Assertions.assertSame(1, foundEntity.size(), "Found invalid amount of entities");
+        Assertions.assertEquals(id, foundEntity.getFirst().getId(), "Found invalid entity");
+    }
+
+    @Test
+    @Order(5)
+    public void testFilterByDateRange() throws SQLException {
+        var id = UUID.fromString("92dad020-b9ac-4e6b-9b15-a02128ce2bce");
+        var foundEntity = getRepository().getReadings(LocalDate.of(2023, 11, 1), LocalDate.of(2023, 11, 2), null);
+
+        Assertions.assertSame(1, foundEntity.size(), "Found invalid amount of entities");
+        Assertions.assertEquals(id, foundEntity.getFirst().getId(), "Found invalid entity");
+    }
+
+    @Test
+    @Order(6)
+    public void testFilterByDateEnd() throws SQLException {
+        var id = UUID.fromString("92dad020-b9ac-4e6b-9b15-a02128ce2bce");
+        var foundEntity = getRepository().getReadings(null, LocalDate.of(2023, 11, 2), null);
+
+        // first the the one created by testInsrt()
+        Assertions.assertSame(2, foundEntity.size(), "Found invalid amount of entities");
+        Assertions.assertEquals(id, foundEntity.getLast().getId(), "Found invalid entity");
+    }
+
+    @Test
+    @Order(7)
+    public void testFilterByDateStart() throws SQLException {
+        var id = UUID.fromString("f889d010-3b3d-4517-9694-df6bcc806fba");
+        var foundEntity = getRepository().getReadings(LocalDate.of(2023, 11, 4), null, null);
+
+        Assertions.assertSame(1, foundEntity.size(), "Found invalid amount of entities");
+        Assertions.assertEquals(id, foundEntity.getFirst().getId(), "Found invalid entity");
+    }
+}

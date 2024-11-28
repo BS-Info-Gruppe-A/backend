@@ -26,4 +26,9 @@ public class CustomerRepositoryTest extends AbstractRepositoryTest<ICustomer> {
     protected void mutateEntity(@NotNull ICustomer entity) {
         entity.setFirstName("Marc2");
     }
+
+    @Override
+    protected int getSeedCount() {
+        return 4;
+    }
 }
