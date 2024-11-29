@@ -3,6 +3,7 @@ package eu.bsinfo.rest;
 import eu.bsinfo.Backend;
 import eu.bsinfo.entity.ICustomer;
 import eu.bsinfo.entity.IReading;
+import eu.bsinfo.rest.objects.Customer;
 import eu.bsinfo.rest.objects.CustomerWithReadings;
 import eu.bsinfo.rest.objects.Customers;
 import eu.bsinfo.rest.objects.UpdatableCustomer;
@@ -62,13 +63,13 @@ public class CustomerService {
     @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ICustomer getById(@PathParam("userId") UUID userId) throws SQLException {
+    public Customer getById(@PathParam("userId") UUID userId) throws SQLException {
         var customer = Backend.getInstance().getCustomerRepository().findById(userId);
 
         if (customer == null) {
             throw new NotFoundException();
         } else {
-            return customer;
+            return new Customer(customer);
         }
     }
 
@@ -84,6 +85,6 @@ public class CustomerService {
         List<IReading> readings = Backend.getInstance().getReadingRepository().getReadings(null, null, null, userId);
 
         Backend.getInstance().getCustomerRepository().delete(customerToDelete);
-        return new CustomerWithReadings(customerToDelete, readings);
+        return CustomerWithReadings.from(customerToDelete, readings);
     }
 }

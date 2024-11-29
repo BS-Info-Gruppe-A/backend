@@ -1,7 +1,5 @@
 package eu.bsinfo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import eu.bsinfo.database.DatabaseManager;
 import eu.bsinfo.database.repository.CustomerRepository;
 import eu.bsinfo.database.repository.ReadingRepository;
@@ -15,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.net.URI;
 import java.util.Objects;
 
+/// Central entry point for the HTTP service.
 public class Backend {
     private static Backend instance;
     private final DatabaseManager databaseManager;
@@ -25,9 +24,10 @@ public class Backend {
             .property(CommonProperties.USE_VIRTUAL_THREADS, true);
 
     public Backend(@NotNull DatabaseManager databaseManager) {
+        if (instance != null) {
+            throw new IllegalStateException("Backend is already initialized");
+        }
         Objects.requireNonNull(databaseManager, "databaseManager cannot be null");
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
 
         this.databaseManager = databaseManager;
         this.customerRepository = new CustomerRepository(databaseManager);
@@ -37,28 +37,43 @@ public class Backend {
         instance = this;
     }
 
+    /// Retrieves the current instance of [Backend].
     public static Backend getInstance() {
         return instance;
     }
 
+    /// Retrieves the [DatabaseManager] used.
     @NotNull
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
     }
 
+    /// Retrieves the [CustomerRepository].
+    @NotNull
     public CustomerRepository getCustomerRepository() {
         return customerRepository;
     }
 
+    ///  Retrieves the [ReadingRepository].
+    @NotNull
+    public ReadingRepository getReadingRepository() {
+        return readingRepository;
+    }
+
+    /// Retrieves the [HttpServer]
+    @NotNull
     public HttpServer getServer() {
         return server;
     }
 
+    /// Retrieves the [Application].
+    @NotNull
     public Application getApplication() {
         return application;
     }
 
-    public ReadingRepository getReadingRepository() {
-        return readingRepository;
+    public void close() {
+        instance = null;
+        server.shutdownNow();
     }
 }

@@ -1,7 +1,9 @@
 package rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.bsinfo.entity.DefaultCustomer;
 import eu.bsinfo.entity.ICustomer;
+import eu.bsinfo.rest.objects.Customer;
 import eu.bsinfo.rest.objects.CustomerWithReadings;
 import eu.bsinfo.rest.objects.Customers;
 import eu.bsinfo.rest.objects.UpdatableCustomer;
@@ -21,18 +23,18 @@ public class CustomerServiceTest extends AbstractRestTest {
 
     @Order(1)
     @Test
-    public void testGet() {
-        var output = target("/customers").request().get(Customers.class);
+    public void testGet() throws JsonProcessingException {
+        var output = get(target("/customers"), Customers.class, "Customers");
         Assertions.assertEquals(4, output.customers().size());
     }
 
     @Order(2)
     @Test
-    public void testGetById() {
+    public void testGetById() throws JsonProcessingException {
         var id = UUID.fromString("d7726d0e-a42e-4f5a-8be9-e80358f9dd37");
-        var output = target("/customers").path(id.toString()).request().get(ICustomer.class);
+        var output = get(target("/customers").path(id.toString()), Customer.class, "Customer");
 
-        Assertions.assertEquals(output.getId(), id);
+        Assertions.assertEquals(output.customer().getId(), id);
     }
 
     @Order(3)
@@ -77,14 +79,14 @@ public class CustomerServiceTest extends AbstractRestTest {
 
     @Order(6)
     @Test
-    public void testDelete() throws SQLException {
+    public void testDelete() throws SQLException, JsonProcessingException {
         var id = UUID.fromString("0e6cf4ab-ec75-4922-80f2-9e4e23d06ad5");
-        var response = target("/customers").path(id.toString()).request().delete(CustomerWithReadings.class);
+        var response = delete(target("/customers").path(id.toString()), CustomerWithReadings.class, "CustomerWithReadings");
 
         var deletedCustomer = getBackend().getCustomerRepository().findById(id);
 
         Assertions.assertNull(deletedCustomer);
-        Assertions.assertEquals(id, response.id());
+        Assertions.assertEquals(id, response.customer().getId());
 
         var readingIds = response.readings().stream().map(CustomerWithReadings.Reading::id).toList();
         var id1 = UUID.fromString("92dad020-b9ac-4e6b-9b15-a02128ce2bce");
