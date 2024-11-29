@@ -82,6 +82,13 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     }
 
     @Test
+    public void testInvalidIdReturnsNull() throws SQLException {
+        var found = getRepository().findById(UUID.randomUUID());
+
+        Assertions.assertNull(found, "Entity not found");
+    }
+
+    @Test
     @Order(Integer.MAX_VALUE) // Use max_value here so we can't schedule any test after this by accident
     public void testDelete() throws SQLException {
         var id = UUID.fromString("f889d010-3b3d-4517-9694-df6bcc806fba");
