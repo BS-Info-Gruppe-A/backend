@@ -9,6 +9,7 @@ import eu.bsinfo.rest.objects.Customers;
 import eu.bsinfo.rest.objects.UpdatableCustomer;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -60,7 +61,9 @@ public class CustomerServiceTest extends AbstractRestTest {
     public void testCreate() throws SQLException {
         var newCustomer = new DefaultCustomer(testId, LocalDate.now(), "Marc", ICustomer.Gender.D, "Degner");
 
-        target("/customers").request().post(Entity.json(newCustomer), Void.class);
+        try(var response = target("/customers").request().post(Entity.json(newCustomer), Response.class)) {
+            Assertions.assertEquals("/customers/" + testId, response.getLocation().getPath());
+        }
 
         var insertedCustomer = getBackend().getCustomerRepository().findById(testId);
 

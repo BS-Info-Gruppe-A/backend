@@ -11,6 +11,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +34,7 @@ public class CustomerService {
         }
         Backend.getInstance().getCustomerRepository().insert(customer);
 
-        return Response.status(Response.Status.CREATED).entity(customer).build();
+        return Response.created(URI.create("customers/"+ customer.getId())).entity(customer).build();
     }
 
     @PUT
@@ -57,7 +58,7 @@ public class CustomerService {
 
         Backend.getInstance().getCustomerRepository().update(currentCustomer);
 
-        return Response.status(Response.Status.ACCEPTED).build();
+        return Response.accepted().build();
     }
 
     @Path("/{userId}")
