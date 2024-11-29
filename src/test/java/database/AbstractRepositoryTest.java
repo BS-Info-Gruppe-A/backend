@@ -19,16 +19,6 @@ public abstract class AbstractRepositoryTest<T extends IId> {
     @Container
     protected static PostgreSQLContainer<?> psql = TestDatabaseUtil.createTestDatabase();
 
-    @BeforeAll
-    public static void beforeAll() {
-        psql.start();
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        psql.stop();
-    }
-
     protected abstract Repository<T> getRepository();
 
     protected abstract T newEntity(UUID id);
