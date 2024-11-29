@@ -12,22 +12,40 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.sql.SQLException;
 import java.util.UUID;
 
+/// Abstract unit test for implementations of the [Repository] interface.
+///
+/// @param <T> the type of the repositories interface
 @Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class AbstractRepositoryTest<T extends IId> {
 
+    /// [PostgreSQLContainer] used for communicating with the database.
     @Container
     protected static PostgreSQLContainer<?> psql = TestDatabaseUtil.createTestDatabase();
 
+    /// Creates a new [Repository] which should be tested.
+    ///
+    /// @see AbstractRepositoryTest#getDatabaseManager()
     protected abstract Repository<T> getRepository();
 
-    protected abstract T newEntity(UUID id);
+    /// Creates a new entity.
+    ///
+    /// @param id the desired id of the created entity
+    @NotNull
+    protected abstract T newEntity(@NotNull UUID id);
 
+    /// Changes the provided entity.
+    ///
+    /// This is used to test the update endpoint and can change anything about the entity, but the id
+    ///
+    /// @param entity the entity to change
     protected abstract void mutateEntity(@NotNull T entity);
 
+    /// Returns the amount of items in the seed file.
     protected abstract int getSeedCount();
 
-    protected DatabaseManager getDatabaseManager() {
+    /// Creates a new [DatabaseManager] using the [AbstractRepositoryTest#psql] container.
+    protected final DatabaseManager getDatabaseManager() {
         return new DatabaseManager(psql.getJdbcUrl(), psql.getUsername(), psql.getPassword(), 1);
     }
 

@@ -20,7 +20,7 @@ public class CustomerRepositoryTest extends AbstractRepositoryTest<ICustomer> {
     }
 
     @Override
-    protected ICustomer newEntity(UUID id) {
+    protected @NotNull ICustomer newEntity(@NotNull UUID id) {
         return getDefaultCustomer(id);
     }
 

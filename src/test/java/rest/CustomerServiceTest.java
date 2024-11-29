@@ -7,16 +7,17 @@ import eu.bsinfo.rest.objects.Customers;
 import eu.bsinfo.rest.objects.UpdatableCustomer;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CustomerServiceTest extends AbstractRestTest {
 
-    private static UUID testId = UUID.randomUUID();
+    private static final UUID testId = UUID.randomUUID();
 
     @Order(1)
     @Test

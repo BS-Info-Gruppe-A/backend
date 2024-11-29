@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ReadingRepositoryTest extends AbstractRepositoryTest<IReading> {
     @Override
@@ -21,7 +20,7 @@ public class ReadingRepositoryTest extends AbstractRepositoryTest<IReading> {
     }
 
     @Override
-    protected IReading newEntity(UUID id) {
+    protected @NotNull IReading newEntity(@NotNull UUID id) {
         var customer = CustomerRepositoryTest.getDefaultCustomer(UUID.fromString("0e6cf4ab-ec75-4922-80f2-9e4e23d06ad5"));
 
         return new DefaultReading(id, "Gatschonga", customer, LocalDate.ofEpochDay(1), IReading.KindOfMeter.valueOf("WASSER"), 67.00, 1337, true);
