@@ -11,7 +11,6 @@ import java.util.UUID;
 /// @see ICustomer
 public class DefaultCustomer implements ICustomer {
 
-    @JsonProperty(required = true)
     private UUID id;
     @JsonProperty(required = true)
     private LocalDate birthDate;

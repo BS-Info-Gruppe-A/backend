@@ -55,19 +55,18 @@ public class CustomerServiceTest extends AbstractRestTest {
         Assertions.assertEquals(updated.getLastName(), update.lastName());
         Assertions.assertEquals(updated.getGender(), update.gender());
     }
-
     @Order(4)
     @Test
-    public void testCreate() throws SQLException {
+    public void testCreate() throws SQLException, JsonProcessingException {
         var newCustomer = new DefaultCustomer(testId, LocalDate.now(), "Marc", ICustomer.Gender.D, "Degner");
 
-        try(var response = target("/customers").request().post(Entity.json(newCustomer), Response.class)) {
-            Assertions.assertEquals("/customers/" + testId, response.getLocation().getPath());
-        }
+        var customer =
+                post(target("/customers"), Entity.json(newCustomer), Customer.class, "Customer")
+                        .customer();
 
-        var insertedCustomer = getBackend().getCustomerRepository().findById(testId);
+        var insertedCustomer = getBackend().getCustomerRepository().findById(customer.getId());
 
-        Assertions.assertEquals(newCustomer, insertedCustomer);
+        Assertions.assertEquals(customer, insertedCustomer);
     }
 
     @Test
@@ -125,5 +124,19 @@ public class CustomerServiceTest extends AbstractRestTest {
         try (var response = target("/customers").path("92dad020-b9ac-4e6b-9b15-a12128ce2bce").request().delete(Response.class)) {
             Assertions.assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo().toEnum());
         }
+    }
+
+    @Order(9)
+    @Test
+    public void testCreateWithoutId() throws SQLException, JsonProcessingException {
+        var newCustomer = new DefaultCustomer(null, LocalDate.now(), "Marc", ICustomer.Gender.D, "Degner");
+
+        var customer =
+                post(target("/customers"), Entity.json(newCustomer), Customer.class, "Customer")
+                        .customer();
+
+        var insertedCustomer = getBackend().getCustomerRepository().findById(customer.getId());
+
+        Assertions.assertEquals(customer, insertedCustomer);
     }
 }

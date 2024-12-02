@@ -9,6 +9,7 @@ import database.TestDatabaseUtil;
 import eu.bsinfo.Backend;
 import eu.bsinfo.database.DatabaseManager;
 import eu.bsinfo.rest.JsonSerializer;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.SyncInvoker;
 import jakarta.ws.rs.client.WebTarget;
@@ -60,6 +61,10 @@ public abstract class AbstractRestTest extends JerseyTest {
         <T> T request(Invocation.Builder invocationBuilder, Class<T> clazz);
     }
 
+    interface RequestFunctionWithBody {
+        <T> T request(Invocation.Builder invocationBuilder, Entity<?> entity, Class<T> clazz);
+    }
+
     protected <T> T get(WebTarget target, Class<T> responseType, String name) throws JsonProcessingException {
         return validateResponse(SyncInvoker::get, target, responseType, name);
     }
@@ -68,8 +73,31 @@ public abstract class AbstractRestTest extends JerseyTest {
         return validateResponse(SyncInvoker::delete, target, responseType, name);
     }
 
+    protected <T> T put(WebTarget target,Entity<?> entity, Class<T> responseType, String name) throws JsonProcessingException {
+        return validateResponseWithBody(SyncInvoker::put, target, entity, responseType, name);
+    }
+
+    protected <T> T post(WebTarget target,Entity<?> entity, Class<T> responseType, String name) throws JsonProcessingException {
+        return validateResponseWithBody(SyncInvoker::post, target, entity, responseType, name);
+    }
+
     private <T> T validateResponse(RequestFunction requester, WebTarget target, Class<T> responseType, String name) throws JsonProcessingException {
         try (var response = requester.request(target.request(), Response.class)) {
+            var json = response.readEntity(String.class);
+            if (name != null) {
+                var schema = schemaFactory.getSchema(SchemaLocation.of("classpath:JSON_Schema_%s.json".formatted(name)));
+                var errors = schema.validate(json, InputFormat.JSON, context -> context.getExecutionConfig().setFormatAssertionsEnabled(true));
+                Assertions.assertSame(0, errors.size(), () -> "Got json validation errors: " + errors);
+            }
+
+            var mapper = serializer.locateMapper(responseType, MediaType.APPLICATION_JSON_TYPE);
+
+            return mapper.readValue(json, responseType);
+        }
+    }
+
+    private <T> T validateResponseWithBody(RequestFunctionWithBody requester, WebTarget target, Entity<?> entity, Class<T> responseType, String name) throws JsonProcessingException {
+        try (var response = requester.request(target.request(), entity, Response.class)) {
             var json = response.readEntity(String.class);
             if (name != null) {
                 var schema = schemaFactory.getSchema(SchemaLocation.of("classpath:JSON_Schema_%s.json".formatted(name)));
