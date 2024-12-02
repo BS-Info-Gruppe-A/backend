@@ -3,6 +3,7 @@ package eu.bsinfo.rest.objects;
 import eu.bsinfo.entity.ICustomer;
 import eu.bsinfo.entity.IReading;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -52,8 +53,10 @@ public record CustomerWithReadings(
             @NotNull IReading.KindOfMeter kindOfMeter,
             double meterCount,
             int meterId,
-            boolean substitute
+            boolean substitute,
+            @Nullable  Void customer
     ) {
+
         public Reading {
             Objects.requireNonNull(id, "id must not be null");
             Objects.requireNonNull(comment, "comment must not be null");
@@ -65,7 +68,7 @@ public record CustomerWithReadings(
         public Reading(@NotNull IReading reading) {
             Objects.requireNonNull(reading, "reading must not be null");
 
-            this(reading.getId(), reading.getComment(), reading.getDateOfReading(), reading.getKindOfMeter(), reading.getMeterCount(), reading.getMeterId(), reading.getSubstitute());
+            this(reading.getId(), reading.getComment(), reading.getDateOfReading(), reading.getKindOfMeter(), reading.getMeterCount(), reading.getMeterId(), reading.getSubstitute(), null);
         }
 
     }
