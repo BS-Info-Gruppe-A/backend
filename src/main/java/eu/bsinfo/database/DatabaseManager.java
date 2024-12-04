@@ -18,7 +18,6 @@ public class DatabaseManager {
     /// @param url      the database url to use
     /// @param user     the user to use
     /// @param password the password to use
-    ///
     /// @throws NullPointerException if a parameter is null
     public DatabaseManager(@NotNull String url, @NotNull String user, @NotNull String password) {
         this(url, user, password, 10);
@@ -30,7 +29,6 @@ public class DatabaseManager {
     /// @param user            the user to use
     /// @param password        the password to use
     /// @param maximumPoolSize the maximum connection pool size
-    ///
     /// @throws NullPointerException if a parameter is null
     public DatabaseManager(@NotNull String url, @NotNull String user, @NotNull String password, int maximumPoolSize) {
         Objects.requireNonNull(url, "url cannot be null");

@@ -9,7 +9,6 @@ import eu.bsinfo.rest.objects.Customers;
 import eu.bsinfo.rest.objects.UpdatableCustomer;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -55,6 +54,7 @@ public class CustomerServiceTest extends AbstractRestTest {
         Assertions.assertEquals(updated.getLastName(), update.lastName());
         Assertions.assertEquals(updated.getGender(), update.gender());
     }
+
     @Order(4)
     @Test
     public void testCreate() throws SQLException, JsonProcessingException {

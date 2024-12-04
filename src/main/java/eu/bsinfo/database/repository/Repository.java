@@ -19,7 +19,7 @@ public abstract class Repository<T extends IId> {
     /// Constructor.
     ///
     /// @param databaseManager reference to the [DatabaseManager] to use
-    ///                                                                      for database connections
+    ///                                                                                             for database connections
     /// @throws NullPointerException if databaseManager is null
     protected Repository(@NotNull DatabaseManager databaseManager) {
         Objects.requireNonNull(databaseManager, "databaseManager cannot be null");

@@ -12,11 +12,10 @@ import java.util.UUID;
 ///
 /// all parameters but `id` are optional
 ///
-/// @param id the id of the customer to update
+/// @param id        the id of the customer to update
 /// @param firstName the new first name of the customer
-/// @param lastName the new last name of the customer
-/// @param gender the new gender of the customer
-///
+/// @param lastName  the new last name of the customer
+/// @param gender    the new gender of the customer
 public record UpdatableCustomer(
         @NotNull @JsonProperty(required = true) UUID id,
         @Nullable String firstName,

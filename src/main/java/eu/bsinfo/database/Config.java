@@ -11,8 +11,8 @@ import java.util.Properties;
 /// Configuration used by [DatabaseManager].
 ///
 /// @param url      the JDBC compatible url to connect to, refer to the
-///                            [PostgreSQL documentation](https://jdbc.postgresql.org/documentation/use/#connecting-to-the-database)
-///                            if you are not sure what this is
+///                                            [PostgreSQL documentation](https://jdbc.postgresql.org/documentation/use/#connecting-to-the-database)
+///                                            if you are not sure what this is
 /// @param username the username for authentication
 /// @param password the password for authentication
 public record Config(@NotNull String url, @NotNull String username, @NotNull String password) {

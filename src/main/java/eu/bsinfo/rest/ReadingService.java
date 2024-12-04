@@ -2,7 +2,9 @@ package eu.bsinfo.rest;
 
 import eu.bsinfo.Backend;
 import eu.bsinfo.entity.IReading;
-import eu.bsinfo.rest.objects.*;
+import eu.bsinfo.rest.objects.Reading;
+import eu.bsinfo.rest.objects.ReadingList;
+import eu.bsinfo.rest.objects.UpdatableReading;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -30,7 +32,7 @@ public class ReadingService {
         }
         Backend.getInstance().getReadingRepository().insert(reading);
 
-        return Response.created(URI.create("readings/"+ reading.getId())).entity(reading).build();
+        return Response.created(URI.create("readings/" + reading.getId())).entity(reading).build();
     }
 
     @PUT
@@ -64,6 +66,7 @@ public class ReadingService {
             return new Reading(reading);
         }
     }
+
     @Path("/{userId}")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -74,27 +77,24 @@ public class ReadingService {
             throw new NotFoundException();
 
         }
-        List<IReading> readings = Backend.getInstance().getReadingRepository().getReadings(null, null, null, userId);
 
         Backend.getInstance().getReadingRepository().delete(readingToDelete);
         return new Reading(readingToDelete);
-
-
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ReadingList getReadingsByFilter(@QueryParam(("start")) LocalDate startDate,@QueryParam(("end")) LocalDate endDate,@QueryParam(("kindOfMeter")) IReading.KindOfMeter kindOfMeter,@QueryParam(("customer")) UUID userId){
+    public ReadingList getReadingsByFilter(@QueryParam("start") LocalDate startDate, @QueryParam("end") LocalDate endDate, @QueryParam("kindOfMeter") IReading.KindOfMeter kindOfMeter, @QueryParam("customer") UUID userId) {
 
-        List<IReading> findReadingByFilters = null;
+        List<IReading> findReadingByFilters;
         try {
-            findReadingByFilters = Backend.getInstance().getReadingRepository().getReadings(startDate,endDate,kindOfMeter, userId);
+            findReadingByFilters = Backend.getInstance().getReadingRepository().getReadings(startDate, endDate, kindOfMeter, userId);
         } catch (SQLException e) {
             log.error("failed to get Readings");
             throw new RuntimeException(e);
         }
-        if(findReadingByFilters == null){
-            log.error("cant find any reading with filters: startDate: [{}],endDate: [{}], kindOfMeter: [{}], userId: [{}]",startDate,endDate,kindOfMeter, userId);
+        if (findReadingByFilters == null) {
+            log.error("cant find any reading with filters: startDate: [{}],endDate: [{}], kindOfMeter: [{}], userId: [{}]", startDate, endDate, kindOfMeter, userId);
             throw new NotFoundException();
         }
         return new ReadingList(findReadingByFilters);

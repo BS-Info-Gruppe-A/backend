@@ -30,7 +30,7 @@ public class CustomerService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCustomer(ICustomer customer) throws SQLException {
         var id = customer.getId();
-        if (id != null &&Backend.getInstance().getCustomerRepository().findById(id) != null) {
+        if (id != null && Backend.getInstance().getCustomerRepository().findById(id) != null) {
             return Response.status(Response.Status.CONFLICT).entity("ID already in use").build();
         }
         if (id == null) {
@@ -38,7 +38,7 @@ public class CustomerService {
         }
         Backend.getInstance().getCustomerRepository().insert(customer);
 
-        return Response.created(URI.create("customers/"+ customer.getId())).entity(new Customer(customer)).build();
+        return Response.created(URI.create("customers/" + customer.getId())).entity(new Customer(customer)).build();
     }
 
     @PUT

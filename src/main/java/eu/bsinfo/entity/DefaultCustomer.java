@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /// Default implementation of [ICustomer].
+///
 /// @see ICustomer
 public class DefaultCustomer implements ICustomer {
 

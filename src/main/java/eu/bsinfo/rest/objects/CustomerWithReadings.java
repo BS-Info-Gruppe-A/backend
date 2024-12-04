@@ -54,7 +54,7 @@ public record CustomerWithReadings(
             double meterCount,
             int meterId,
             boolean substitute,
-            @Nullable  Void customer
+            @Nullable Void customer
     ) {
 
         public Reading {

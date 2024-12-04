@@ -35,7 +35,8 @@ public abstract class AbstractRestTest extends JerseyTest {
 
     private static final JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012);
     private static final JsonSerializer serializer = new JsonSerializer();
-
+    @Container
+    protected static PostgreSQLContainer<?> psql = TestDatabaseUtil.createTestDatabase();
     private static Backend backend;
 
     @BeforeAll
@@ -43,9 +44,6 @@ public abstract class AbstractRestTest extends JerseyTest {
         var databaseManager = new DatabaseManager(psql.getJdbcUrl(), psql.getUsername(), psql.getPassword(), 1);
         backend = new Backend(databaseManager);
     }
-
-    @Container
-    protected static PostgreSQLContainer<?> psql = TestDatabaseUtil.createTestDatabase();
 
     @Override
     protected Application configure() {
@@ -57,14 +55,6 @@ public abstract class AbstractRestTest extends JerseyTest {
         return backend;
     }
 
-    interface RequestFunction {
-        <T> T request(Invocation.Builder invocationBuilder, Class<T> clazz);
-    }
-
-    interface RequestFunctionWithBody {
-        <T> T request(Invocation.Builder invocationBuilder, Entity<?> entity, Class<T> clazz);
-    }
-
     protected <T> T get(WebTarget target, Class<T> responseType, String name) throws JsonProcessingException {
         return validateResponse(SyncInvoker::get, target, responseType, name);
     }
@@ -73,11 +63,11 @@ public abstract class AbstractRestTest extends JerseyTest {
         return validateResponse(SyncInvoker::delete, target, responseType, name);
     }
 
-    protected <T> T put(WebTarget target,Entity<?> entity, Class<T> responseType, String name) throws JsonProcessingException {
+    protected <T> T put(WebTarget target, Entity<?> entity, Class<T> responseType, String name) throws JsonProcessingException {
         return validateResponseWithBody(SyncInvoker::put, target, entity, responseType, name);
     }
 
-    protected <T> T post(WebTarget target,Entity<?> entity, Class<T> responseType, String name) throws JsonProcessingException {
+    protected <T> T post(WebTarget target, Entity<?> entity, Class<T> responseType, String name) throws JsonProcessingException {
         return validateResponseWithBody(SyncInvoker::post, target, entity, responseType, name);
     }
 
@@ -109,5 +99,13 @@ public abstract class AbstractRestTest extends JerseyTest {
 
             return mapper.readValue(json, responseType);
         }
+    }
+
+    interface RequestFunction {
+        <T> T request(Invocation.Builder invocationBuilder, Class<T> clazz);
+    }
+
+    interface RequestFunctionWithBody {
+        <T> T request(Invocation.Builder invocationBuilder, Entity<?> entity, Class<T> clazz);
     }
 }
