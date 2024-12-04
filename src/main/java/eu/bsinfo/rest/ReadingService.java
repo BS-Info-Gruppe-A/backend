@@ -3,7 +3,7 @@ package eu.bsinfo.rest;
 import eu.bsinfo.Backend;
 import eu.bsinfo.entity.IReading;
 import eu.bsinfo.rest.objects.Reading;
-import eu.bsinfo.rest.objects.ReadingList;
+import eu.bsinfo.rest.objects.Readings;
 import eu.bsinfo.rest.objects.UpdatableReading;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -15,6 +15,7 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Path("/readings")
@@ -26,13 +27,16 @@ public class ReadingService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReading(IReading reading) throws SQLException {
-        if (Backend.getInstance().getReadingRepository().findById(reading.getId()) != null) {
+        if (reading.getId() != null && Backend.getInstance().getReadingRepository().findById(reading.getId()) != null) {
             log.error("ID already in use");
             return Response.status(Response.Status.CONFLICT).entity("ID already in use").build();
         }
+        if (reading.getId() == null) {
+            reading.setId(UUID.randomUUID());
+        }
         Backend.getInstance().getReadingRepository().insert(reading);
 
-        return Response.created(URI.create("readings/" + reading.getId())).entity(reading).build();
+        return Response.created(URI.create("readings/" + reading.getId())).entity(new Reading(reading)).build();
     }
 
     @PUT
@@ -47,6 +51,21 @@ public class ReadingService {
 
         if (reading.comment() != null) {
             currentReading.setComment(reading.comment());
+        }
+        if (reading.dateOfReading() != null) {
+            currentReading.setDateOfReading(reading.dateOfReading());
+        }
+        if (reading.meterId() != null) {
+            currentReading.setMeterId(reading.meterId());
+        }
+        if (reading.meterCount() != null) {
+            currentReading.setMeterCount(reading.meterCount());
+        }
+        if (reading.kindOfMeter() != null) {
+            currentReading.setKindOfMeter(reading.kindOfMeter());
+        }
+        if (reading.substitute() != null) {
+            currentReading.setSubstitute(reading.substitute());
         }
         Backend.getInstance().getReadingRepository().update(currentReading);
 
@@ -84,20 +103,12 @@ public class ReadingService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ReadingList getReadingsByFilter(@QueryParam("start") LocalDate startDate, @QueryParam("end") LocalDate endDate, @QueryParam("kindOfMeter") IReading.KindOfMeter kindOfMeter, @QueryParam("customer") UUID userId) {
-
-        List<IReading> findReadingByFilters;
-        try {
-            findReadingByFilters = Backend.getInstance().getReadingRepository().getReadings(startDate, endDate, kindOfMeter, userId);
-        } catch (SQLException e) {
-            log.error("failed to get Readings");
-            throw new RuntimeException(e);
-        }
+    public Readings getReadingsByFilter(@QueryParam("start") Optional<LocalDate> startDate, @QueryParam("end") Optional<LocalDate> endDate, @QueryParam("kindOfMeter") Optional<IReading.KindOfMeter> kindOfMeter, @QueryParam("customer") Optional<UUID> userId) throws SQLException {
+        List<IReading> findReadingByFilters = Backend.getInstance().getReadingRepository().getReadings(startDate.orElse(null), endDate.orElse(null), kindOfMeter.orElse(null), userId.orElse(null));
         if (findReadingByFilters == null) {
-            log.error("cant find any reading with filters: startDate: [{}],endDate: [{}], kindOfMeter: [{}], userId: [{}]", startDate, endDate, kindOfMeter, userId);
             throw new NotFoundException();
         }
-        return new ReadingList(findReadingByFilters);
+        return new Readings(findReadingByFilters);
     }
 
 }

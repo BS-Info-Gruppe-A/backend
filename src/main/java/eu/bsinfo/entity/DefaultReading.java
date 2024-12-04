@@ -1,6 +1,10 @@
 package eu.bsinfo.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,17 +14,41 @@ import java.util.UUID;
 
 public class DefaultReading implements IReading {
 
+    @Nullable
+    @JsonProperty(required = true)
     private UUID id;
+    @NotNull
+    @JsonProperty(required = true)
     private String comment;
+    @NotNull
+    @JsonProperty(required = true)
     private ICustomer customer;
+    @NotNull
+    @JsonProperty(required = true)
     private LocalDate dateOfReading;
+    @NotNull
+    @JsonProperty(required = true)
     private KindOfMeter kindOfMeter;
-    @JsonProperty("metercount")
+    @NotNull
+    @JsonProperty(required = true)
     private Double meterCount;
+    @JsonProperty(required = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private int meterId;
+    @NotNull
+    @JsonProperty(required = true)
     private Boolean substitute;
 
-    public DefaultReading(UUID id, String comment, ICustomer customer, LocalDate dateOfReading, KindOfMeter kindOfMeter, Double meterCount, int meterId, Boolean substitute) {
+    @JsonCreator
+    public DefaultReading(@JsonProperty("id") @Nullable UUID id,
+                          @JsonProperty("comment") @NotNull String comment,
+                          @JsonProperty("customer") @NotNull ICustomer customer,
+                          @JsonProperty("dateOfReading") @NotNull LocalDate dateOfReading,
+                          @JsonProperty("kindOfMeter") @NotNull KindOfMeter kindOfMeter,
+                          @JsonProperty("meterCount") @NotNull Double meterCount,
+                          @JsonProperty("meterId") int meterId,
+                          @JsonProperty("substitute") @NotNull Boolean substitute
+    ) {
         this.id = id;
         this.comment = comment;
         this.customer = customer;
@@ -32,52 +60,52 @@ public class DefaultReading implements IReading {
     }
 
     @Override
-    public String getComment() {
+    public @NotNull String getComment() {
         return comment;
     }
 
     @Override
-    public void setComment(String comment) {
+    public void setComment(@NotNull String comment) {
         this.comment = comment;
     }
 
     @Override
-    public ICustomer getCustomer() {
+    public @NotNull ICustomer getCustomer() {
         return customer;
     }
 
     @Override
-    public void setCustomer(ICustomer customer) {
+    public void setCustomer(@NotNull ICustomer customer) {
         this.customer = customer;
     }
 
     @Override
-    public LocalDate getDateOfReading() {
+    public @NotNull LocalDate getDateOfReading() {
         return dateOfReading;
     }
 
     @Override
-    public void setDateOfReading(LocalDate dateOfReading) {
+    public void setDateOfReading(@NotNull LocalDate dateOfReading) {
         this.dateOfReading = dateOfReading;
     }
 
     @Override
-    public KindOfMeter getKindOfMeter() {
+    public @NotNull KindOfMeter getKindOfMeter() {
         return kindOfMeter;
     }
 
     @Override
-    public void setKindOfMeter(KindOfMeter kindOfMeter) {
+    public void setKindOfMeter(@NotNull KindOfMeter kindOfMeter) {
         this.kindOfMeter = kindOfMeter;
     }
 
     @Override
-    public Double getMeterCount() {
+    public @NotNull Double getMeterCount() {
         return meterCount;
     }
 
     @Override
-    public void setMeterCount(Double meterCount) {
+    public void setMeterCount(@NotNull Double meterCount) {
         this.meterCount = meterCount;
     }
 
@@ -92,12 +120,12 @@ public class DefaultReading implements IReading {
     }
 
     @Override
-    public Boolean getSubstitute() {
+    public @NotNull Boolean getSubstitute() {
         return substitute;
     }
 
     @Override
-    public void setSubstitute(Boolean substitute) {
+    public void setSubstitute(@NotNull Boolean substitute) {
         this.substitute = substitute;
     }
 
@@ -107,12 +135,12 @@ public class DefaultReading implements IReading {
     }
 
     @Override
-    public UUID getId() {
+    public @Nullable UUID getId() {
         return id;
     }
 
     @Override
-    public void setId(UUID id) {
+    public void setId(@Nullable UUID id) {
         this.id = id;
     }
 

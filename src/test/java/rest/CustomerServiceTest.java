@@ -50,9 +50,9 @@ public class CustomerServiceTest extends AbstractRestTest {
 
         Assertions.assertNotEquals(current, updated);
         Assertions.assertNotNull(updated);
-        Assertions.assertEquals(updated.getFirstName(), update.firstName());
-        Assertions.assertEquals(updated.getLastName(), update.lastName());
-        Assertions.assertEquals(updated.getGender(), update.gender());
+        Assertions.assertEquals(update.firstName(), updated.getFirstName());
+        Assertions.assertEquals(update.lastName(), updated.getLastName());
+        Assertions.assertEquals(update.gender(), updated.getGender());
     }
 
     @Order(4)
