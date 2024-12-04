@@ -6,18 +6,16 @@ import jakarta.ws.rs.ext.ParamConverterProvider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class LocalDateParamConverter implements ParamConverter<LocalDate> {
-    private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     @Override
     public LocalDate fromString(String s) {
-        return LocalDate.from(format.parse(s));
+        return LocalDate.from(JsonSerializer.FORMAT.parse(s));
     }
 
     @Override
     public String toString(LocalDate date) {
-        return format.format(date);
+        return JsonSerializer.FORMAT.format(date);
     }
 
     @jakarta.ws.rs.ext.Provider
