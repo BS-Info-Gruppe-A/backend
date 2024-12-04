@@ -1,7 +1,3 @@
-DROP TABLE IF EXISTS readings;
-DROP TABLE IF EXISTS customers;
-
-DROP TYPE IF EXISTS Gender;
 CREATE TYPE Gender AS ENUM ('M', 'W', 'D', 'U');
 
 CREATE TABLE customers
