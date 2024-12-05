@@ -19,7 +19,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: gruppe-a@bsinfo.eu
       PGADMIN_DEFAULT_PASSWORD: bs
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - ./pgadmin/servers.json:/pgadmin4/servers.json
       - pgadmin_data:/var/lib/pgadmin

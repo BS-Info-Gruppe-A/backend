@@ -9,9 +9,10 @@ import java.util.Objects;
 import java.util.Properties;
 
 /// Configuration used by [DatabaseManager].
-/// @param url the JDBC compatible url to connect to, refer to the
-///            [PostgreSQL documentation](https://jdbc.postgresql.org/documentation/use/#connecting-to-the-database)
-///            if you are not sure what this is
+///
+/// @param url      the JDBC compatible url to connect to, refer to the
+///                                            [PostgreSQL documentation](https://jdbc.postgresql.org/documentation/use/#connecting-to-the-database)
+///                                            if you are not sure what this is
 /// @param username the username for authentication
 /// @param password the password for authentication
 public record Config(@NotNull String url, @NotNull String username, @NotNull String password) {
@@ -23,6 +24,7 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
     }
 
     /// Reads the config from its default location, which is `~/bsinfo-projekt/database.properties`.
+    ///
     /// @return the parsed config.
     @NotNull
     public static Config fromDefault() throws IOException {
@@ -33,7 +35,8 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
     }
 
     /// This creates a Config from a file.
-    /// @param path the [Path] to look for
+    ///
+    /// @param path       the [Path] to look for
     /// @param systemUser the user to connect to
     /// @return the parsed config
     @NotNull
@@ -41,7 +44,7 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
         Objects.requireNonNull(path, "path cannot be null");
         Objects.requireNonNull(systemUser, "systemUser cannot be null");
 
-        try(var inputStream = Files.newInputStream(path)) {
+        try (var inputStream = Files.newInputStream(path)) {
             var properties = new Properties();
             properties.load(inputStream);
 

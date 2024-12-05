@@ -1,46 +1,14 @@
 package eu.bsinfo.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@JsonDeserialize(as = DefaultReading.class)
 public interface IReading extends IId {
-
-    enum KindOfMeter {
-        HEIZUNG, STROM, UNBEKANNT, WASSER
-    }
-
-    String getComment();
-
-    ICustomer getCustomer();
-
-    LocalDate getDateOfReading();
-
-    KindOfMeter getKindOfMeter();
-
-    Double getMeterCount();
-
-    int getMeterId();
-
-    Boolean getSubstitute();
-
-    String printDateOfReading();
-
-    void setComment(String comment);
-
-    void setCustomer(ICustomer customer);
-
-    void setDateOfReading(LocalDate dateOfReading);
-
-    void setKindOfMeter(KindOfMeter kindOfMeter);
-
-    void setMeterCount(Double meterCount);
-
-    void setMeterId(int meterId);
-
-    void setSubstitute(Boolean substitute);
-
 
     /// Creates a new [IReading] from a [ResultSet]
     ///
@@ -58,5 +26,40 @@ public interface IReading extends IId {
         var substitute = resultSet.getBoolean("substitute");
 
         return new DefaultReading(id, comment, customer, dateOfReading, KindOfMeter.valueOf(kindOfMeter), meterCount, meterId, substitute);
+    }
+
+    String getComment();
+
+    void setComment(String comment);
+
+    ICustomer getCustomer();
+
+    void setCustomer(ICustomer customer);
+
+    LocalDate getDateOfReading();
+
+    void setDateOfReading(LocalDate dateOfReading);
+
+    KindOfMeter getKindOfMeter();
+
+    void setKindOfMeter(KindOfMeter kindOfMeter);
+
+    Double getMeterCount();
+
+    void setMeterCount(Double meterCount);
+
+    int getMeterId();
+
+    void setMeterId(int meterId);
+
+    Boolean getSubstitute();
+
+    void setSubstitute(Boolean substitute);
+
+    String printDateOfReading();
+
+
+    enum KindOfMeter {
+        HEIZUNG, STROM, UNBEKANNT, WASSER
     }
 }
