@@ -115,7 +115,7 @@ case "$( uname )" in                #(
   NONSTOP* )        nonstop=true ;;
 esac
 
-CLASSPATH=$(find "$APP_HOME/lib" -name '*.jar' -printf '%p:' | sed 's/:$//')
+CLASSPATH=$(find "$APP_HOME/lib" -name '*.jar' -print0 | xargs -0 | sed 's/ /:/g')
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
