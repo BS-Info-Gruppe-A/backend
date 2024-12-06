@@ -32,7 +32,7 @@ public class Backend {
         this.databaseManager = databaseManager;
         this.customerRepository = new CustomerRepository(databaseManager);
         this.readingRepository = new ReadingRepository(databaseManager);
-        server = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://localhost:8080"), application, false);
+        server = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://0.0.0.0:8080"), application, false);
 
         instance = this;
     }
