@@ -38,7 +38,7 @@ public class ReadingRepository extends Repository<IReading> {
         try (var connection = databaseManager.getConnection();
              var statement = connection.prepareStatement("""
                      SELECT * FROM readings
-                     JOIN customers c on c.id = customer_id
+                     LEFT JOIN customers c on c.id = customer_id
                      WHERE readings.id = ?
                      """)) {
             statement.setObject(1, id);
@@ -61,7 +61,7 @@ public class ReadingRepository extends Repository<IReading> {
              var statement = connection.prepareStatement("""
                      SELECT *
                      FROM readings
-                     JOIN customers c ON c.id = readings.customer_id;
+                     LEFT JOIN customers c ON c.id = readings.customer_id;
                      """)) {
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -82,7 +82,8 @@ public class ReadingRepository extends Repository<IReading> {
     /// @throws SQLException         if an SQL error occurs
     /// @throws NullPointerException if date and kindOfMeter is null
     public List<IReading> getReadings(@Nullable LocalDate startDate, @Nullable LocalDate endDate, @Nullable IReading.KindOfMeter kindOfMeter, @Nullable UUID customerId) throws SQLException {
-        var sqlStatement = new StringBuilder("SELECT * FROM readings JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ?");
+        //language=SQL
+        var sqlStatement = new StringBuilder("SELECT * FROM readings LEFT JOIN customers c ON c.id = readings.customer_id WHERE readings.read_date BETWEEN ? AND ?");
         var output = new ArrayList<IReading>();
         var safeStartDate = Optional.ofNullable(startDate).orElse(LocalDate.MIN);
         var safeEndDate = Optional.ofNullable(endDate).orElse(LocalDate.MAX);
