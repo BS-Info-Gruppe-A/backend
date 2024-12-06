@@ -20,7 +20,7 @@ public class DefaultReading implements IReading {
     @NotNull
     @JsonProperty(required = true)
     private String comment;
-    @NotNull
+    @Nullable
     @JsonProperty(required = true)
     private ICustomer customer;
     @NotNull
@@ -42,7 +42,7 @@ public class DefaultReading implements IReading {
     @JsonCreator
     public DefaultReading(@JsonProperty("id") @Nullable UUID id,
                           @JsonProperty("comment") @NotNull String comment,
-                          @JsonProperty("customer") @NotNull ICustomer customer,
+                          @JsonProperty("customer") @Nullable ICustomer customer,
                           @JsonProperty("dateOfReading") @NotNull LocalDate dateOfReading,
                           @JsonProperty("kindOfMeter") @NotNull KindOfMeter kindOfMeter,
                           @JsonProperty("meterCount") @NotNull Double meterCount,
@@ -69,8 +69,9 @@ public class DefaultReading implements IReading {
         this.comment = comment;
     }
 
+    @Nullable
     @Override
-    public @NotNull ICustomer getCustomer() {
+    public ICustomer getCustomer() {
         return customer;
     }
 

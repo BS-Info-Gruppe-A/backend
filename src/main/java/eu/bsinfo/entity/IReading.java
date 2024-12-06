@@ -18,7 +18,7 @@ public interface IReading extends IId {
     static IReading from(ResultSet resultSet) throws SQLException {
         var id = resultSet.getObject("id", UUID.class);
         var comment = resultSet.getString("comment");
-        var customer = ICustomer.from(resultSet, "customer_id");
+        var customer = resultSet.getObject("customer_id") == null ? null : ICustomer.from(resultSet, "customer_id");
         var dateOfReading = resultSet.getTimestamp("read_date").toLocalDateTime().toLocalDate();
         var kindOfMeter = resultSet.getString("meter_type");
         var meterCount = resultSet.getDouble("meter_count");
