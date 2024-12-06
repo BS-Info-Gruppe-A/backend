@@ -15,5 +15,6 @@ public class CORSHandler implements ContainerResponseFilter {
         headers.add("Access-Control-Allow-Headers", "Accept, Content-Type");
         headers.add("Access-Control-Allow-Credentials", "true");
         headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        headers.add("Vary", "Origin");
     }
 }
