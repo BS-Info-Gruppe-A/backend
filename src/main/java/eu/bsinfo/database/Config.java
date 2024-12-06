@@ -20,8 +20,6 @@ public record Config(@NotNull String url, @Nullable String username, @Nullable S
 
     public Config {
         Objects.requireNonNull(url, "url cannot be null");
-        Objects.requireNonNull(username, "username cannot be null");
-        Objects.requireNonNull(password, "password cannot be null");
     }
 
     /// Reads the config from the environment or its default location, which is `~/bsinfo-projekt/database.properties`.
