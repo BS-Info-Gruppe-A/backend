@@ -11,7 +11,15 @@ public class CORSHandler implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
         MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-        headers.add("Access-Control-Allow-Origin", System.getenv("CORS_ORIGIN"));
+        var origins = System.getenv("CORS_ORIGIN");
+        if (origins != null) {
+            var list = origins.split(",\\s*");
+            for (var origin : list) {
+                if (origin.equals(requestContext.getHeaderString("Origin"))) {
+                     headers.add("Access-Control-Allow-Origin", origin);
+                }
+            }
+        }
         headers.add("Access-Control-Allow-Headers", "Accept, Content-Type");
         headers.add("Access-Control-Allow-Credentials", "true");
         headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
