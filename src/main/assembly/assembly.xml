@@ -1,4 +1,5 @@
-<assembly>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
     <id>app</id>
     <formats>
         <format>dir</format>
@@ -25,6 +26,7 @@
         <fileSet>
             <directory>src/main/assembly</directory>
             <outputDirectory>bin</outputDirectory>
+            <fileMode>755</fileMode>
             <includes>
                 <include>backend</include>
                 <include>backend.bat</include>
