@@ -3,6 +3,7 @@ package eu.bsinfo.database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -19,7 +20,7 @@ public class DatabaseManager {
     /// @param user     the user to use
     /// @param password the password to use
     /// @throws NullPointerException if a parameter is null
-    public DatabaseManager(@NotNull String url, @NotNull String user, @NotNull String password) {
+    public DatabaseManager(@NotNull String url, @Nullable String user, @Nullable String password) {
         this(url, user, password, 10);
     }
 
@@ -30,16 +31,18 @@ public class DatabaseManager {
     /// @param password        the password to use
     /// @param maximumPoolSize the maximum connection pool size
     /// @throws NullPointerException if a parameter is null
-    public DatabaseManager(@NotNull String url, @NotNull String user, @NotNull String password, int maximumPoolSize) {
+    public DatabaseManager(@NotNull String url, @Nullable String user, @Nullable String password, int maximumPoolSize) {
         Objects.requireNonNull(url, "url cannot be null");
-        Objects.requireNonNull(user, "user cannot be null");
-        Objects.requireNonNull(password, "password cannot be null");
 
         var config = new HikariConfig();
 
         config.setJdbcUrl(url);
-        config.setUsername(user);
-        config.setPassword(password);
+        if (user != null) {
+            config.setUsername(user);
+        }
+        if (password != null) {
+            config.setPassword(password);
+        }
         config.setMaximumPoolSize(maximumPoolSize);
 
         dataSource = new HikariDataSource(config);

@@ -1,6 +1,7 @@
 package eu.bsinfo.database;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +16,7 @@ import java.util.Properties;
 ///                                            if you are not sure what this is
 /// @param username the username for authentication
 /// @param password the password for authentication
-public record Config(@NotNull String url, @NotNull String username, @NotNull String password) {
+public record Config(@NotNull String url, @Nullable String username, @Nullable String password) {
 
     public Config {
         Objects.requireNonNull(url, "url cannot be null");
@@ -23,15 +24,33 @@ public record Config(@NotNull String url, @NotNull String username, @NotNull Str
         Objects.requireNonNull(password, "password cannot be null");
     }
 
-    /// Reads the config from its default location, which is `~/bsinfo-projekt/database.properties`.
+    /// Reads the config from the environment or its default location, which is `~/bsinfo-projekt/database.properties`.
     ///
+    /// @see this#fromFile(Path, String)
+    /// @see this#fromEnvironment()
     /// @return the parsed config.
     @NotNull
     public static Config fromDefault() throws IOException {
-        var systemUser = System.getProperty("user.name");
-        var systemHome = System.getProperty("user.home");
+        try {
+            return fromEnvironment();
+        } catch (IllegalStateException ignored) {
+            var systemUser = System.getProperty("user.name");
+            var systemHome = System.getProperty("user.home");
 
-        return fromFile(Path.of(systemHome, "bsinfo-projekt", "database.properties"), systemUser);
+            return fromFile(Path.of(systemHome, "bsinfo-projekt", "database.properties"), systemUser);
+        }
+    }
+
+    /// Creates a config from the `DB_URL` environment variable
+    ///
+    /// @throws IllegalStateException if the `DB_URL` variable is not set
+    public static Config fromEnvironment() {
+        var url = System.getenv("DB_URL");
+        if (url == null) {
+            throw new IllegalStateException("Environment config is not set");
+        }
+
+        return new Config(url, null, null);
     }
 
     /// This creates a Config from a file.
