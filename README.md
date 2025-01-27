@@ -1,17 +1,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Here's a blank template to get started. To avoid retyping too much info, do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`, `project_license`
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-### Built With
-
-* [![Java][java.java]][https://www.java.com/de/]
-* [![Docker][docker]][https://www.docker.com/]
-
+This project is a simple application built as part of our school assignment. It allows users to check the current status of the in-house counters.
 
 <!-- GETTING STARTED -->
 ## Getting Started
