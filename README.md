@@ -17,34 +17,46 @@ We are using the image: pgadmin4:8
 ### Prerequisites
 
 This is a list of tools you need to use and how to install them.
-* maven
-  ```sh
-  sudo apt-get install maven
-  ```
-* docker
-  ```sh
-  sudo apt-get install docker
-  ```
+- [JDK 23](https://www.oracle.com/de/java/technologies/downloads/#java23)
+- [Docker](https://docs.docker.com/get-started/get-docker/)
+- [Docker Compose (Linux only)](https://docs.docker.com/compose/install/#scenario-two-install-the-docker-compose-plugin)
   
 ### Installation
 
 1. Clone the repo
    ```sh
    git clone https://github.com/BS-Info-Gruppe-A/backend.git
+   cd backend
    ```
-2. Install all packages
+2. Generate `~/.m2/toolchains.xml` (manually copy the xml from the below command into the file)
    ```sh
-   apt-get install docker maven
+   ./mvnw toolchains:generate-jdk-toolchains-xml
    ```
-3. Setup your dockers (cli or dockerDesktop)
+3. Start database server )if needed)
    ```sh
-   docker run...
+   docker compose -f dev.docker-compose.yaml up -d
    ```
    
-4. Change config of dockers
+4. Change config of service (replace `VornameNachname` with your OS username in the copied file)
    ```sh
-   vim /src/main/resources/database.properties
+   mkdir -p ~/bsinfo-projekt/
+   cp src/main/resources/database.properties.example ~/bsinfo-projekt/database.properties
    ```
+
+# Tasks
+
+## Running
+In order to run this project, use your [IDE](https://jetbrains.com/idea) to run the [Launcher.java](https://github.com/BS-Info-Gruppe-A/backend/blob/a543ee282f013d849f92932dcdc0e5b25a5f18a8/src/main/java/Launcher.java#L5) file.
+Please note that the only supported Java Version is Java 23 with preview features enabled (`--enable-preview`)
+
+## Running tests
+
+To run tests execute `./mvnw test` in a POSIX compliant shell (cmd is not supported, use [PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows))
+
+## Generating project report
+
+To run tests execute `./mvnw site` in a POSIX compliant shell (cmd is not supported, use [PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows))
+The generated report will be in `target/site/index.html`
 
 
 <!-- USAGE EXAMPLES -->
