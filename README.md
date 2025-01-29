@@ -17,7 +17,7 @@ We are using the image: pgadmin4:8
 ### Prerequisites
 
 This is a list of tools you need to use and how to install them.
-- [JDK 23](https://www.oracle.com/de/java/technologies/downloads/#java23)
+- [JDK 23](https://www.oracle.com/java/technologies/downloads/#java23)
 - [Docker](https://docs.docker.com/get-started/get-docker/)
 - [Docker Compose (Linux only)](https://docs.docker.com/compose/install/#scenario-two-install-the-docker-compose-plugin)
   
