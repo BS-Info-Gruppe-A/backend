@@ -7,6 +7,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 
+@SuppressWarnings("unused") // used by Provider
 public class LocalDateParamConverter implements ParamConverter<LocalDate> {
     @Override
     public LocalDate fromString(String s) {
