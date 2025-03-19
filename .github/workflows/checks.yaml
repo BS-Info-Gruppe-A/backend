@@ -19,8 +19,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 23
+          distribution: 'oracle'
+          java-version: 24
           cache: maven
       - uses: gradle/develocity-actions/maven-setup@v1
       - name: Setup Docker buildx

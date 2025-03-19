@@ -1,4 +1,4 @@
-FROM --platform=$TARGETOS/$TARGETARCH eclipse-temurin:23-jre-alpine
+FROM --platform=$TARGETOS/$TARGETARCH oracle/jdk:24
 
 WORKDIR /usr/app
 COPY target/backend-*-app/lib lib

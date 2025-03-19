@@ -20,7 +20,10 @@ public class Backend {
     private final HttpServer server;
     private final CustomerRepository customerRepository;
     private final ReadingRepository readingRepository;
-    private final ResourceConfig application = new ResourceConfig().packages("eu.bsinfo.rest")
+    private final ResourceConfig application = new ResourceConfig()
+            .packages("eu.bsinfo.rest")
+            // Disable automatic json processing, this is handled by eu.bsinfo.rest.JsonSerializer
+            .property(CommonProperties.JSON_PROCESSING_FEATURE_DISABLE, true)
             .property(CommonProperties.USE_VIRTUAL_THREADS, true);
 
     public Backend(@NotNull DatabaseManager databaseManager) {
