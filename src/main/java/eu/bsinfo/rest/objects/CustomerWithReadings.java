@@ -48,7 +48,7 @@ public record CustomerWithReadings(
     /// @param substitute    whether the reading is a substitute
     public record Reading(
             @NotNull UUID id,
-            @NotNull String comment,
+            @Nullable String comment,
             @NotNull LocalDate dateOfReading,
             @NotNull IReading.KindOfMeter kindOfMeter,
             double meterCount,
@@ -59,7 +59,6 @@ public record CustomerWithReadings(
 
         public Reading {
             Objects.requireNonNull(id, "id must not be null");
-            Objects.requireNonNull(comment, "comment must not be null");
             Objects.requireNonNull(dateOfReading, "dateOfReading must not be null");
             Objects.requireNonNull(kindOfMeter, "kindOfMeter must not be null");
         }
