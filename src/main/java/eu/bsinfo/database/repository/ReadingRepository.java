@@ -159,7 +159,11 @@ public class ReadingRepository extends Repository<IReading> {
                      UPDATE readings SET comment = ?, customer_id = ?, read_date = ?, meter_type = ?,  meter_count = ?,
                      meter_id = ?, substitute = ? WHERE id = ?""")) {
             statement.setString(1, entity.getComment());
-            statement.setObject(2, entity.getCustomer().getId());
+            if (entity.getCustomer() == null) {
+                statement.setObject(2, null);
+            } else {
+                statement.setObject(2, entity.getCustomer().getId());
+            }
             statement.setTimestamp(3, Timestamp.valueOf(entity.getDateOfReading().atTime(0, 0)));
             statement.setObject(4, entity.getKindOfMeter(), Types.OTHER);
             statement.setDouble(5, entity.getMeterCount());
