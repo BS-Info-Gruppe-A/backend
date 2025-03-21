@@ -1,4 +1,4 @@
-FROM --platform=$TARGETOS/$TARGETARCH oracle/jdk:24
+FROM --platform=$TARGETOS/$TARGETARCH openjdk:24-jdk-bullseye
 
 WORKDIR /usr/app
 COPY target/backend-*-app/lib lib
