@@ -3,6 +3,7 @@ package eu.bsinfo;
 import eu.bsinfo.database.DatabaseManager;
 import eu.bsinfo.database.repository.CustomerRepository;
 import eu.bsinfo.database.repository.ReadingRepository;
+import eu.bsinfo.rest.JsonSerializer;
 import jakarta.ws.rs.core.Application;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.CommonProperties;
@@ -22,6 +23,8 @@ public class Backend {
     private final ReadingRepository readingRepository;
     private final ResourceConfig application = new ResourceConfig()
             .packages("eu.bsinfo.rest")
+            // For some reason auto registration does not register this
+            .register(JsonSerializer.class)
             // Disable automatic json processing, this is handled by eu.bsinfo.rest.JsonSerializer
             .property(CommonProperties.JSON_PROCESSING_FEATURE_DISABLE, true)
             .property(CommonProperties.USE_VIRTUAL_THREADS, true);
