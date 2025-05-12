@@ -14,7 +14,6 @@ import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.SyncInvoker;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Application;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.jupiter.api.*;
@@ -82,7 +81,7 @@ public abstract class AbstractRestTest extends JerseyTest {
                 Assertions.assertSame(0, errors.size(), () -> "Got json validation errors: " + errors);
             }
 
-            var mapper = serializer.locateMapper(responseType, MediaType.APPLICATION_JSON_TYPE);
+            var mapper = serializer.getContext(responseType);
 
             return mapper.readValue(json, responseType);
         }
@@ -97,7 +96,7 @@ public abstract class AbstractRestTest extends JerseyTest {
                 Assertions.assertSame(0, errors.size(), () -> "Got json validation errors: " + errors);
             }
 
-            var mapper = serializer.locateMapper(responseType, MediaType.APPLICATION_JSON_TYPE);
+            var mapper = serializer.getContext(responseType);
 
             return mapper.readValue(json, responseType);
         }

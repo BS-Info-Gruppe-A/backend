@@ -2,10 +2,11 @@ package eu.bsinfo.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.Provider;
-import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
 import java.time.format.DateTimeFormatter;
 
@@ -13,19 +14,19 @@ import java.time.format.DateTimeFormatter;
 /// using an [ObjectMapper] with a custom date format.
 @Produces(MediaType.APPLICATION_JSON)
 @Provider
-public class JsonSerializer extends JacksonJaxbJsonProvider {
+public class JsonSerializer implements ContextResolver<ObjectMapper> {
     public static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    private final ObjectMapper mapper;
+
     public JsonSerializer() {
-        var mapper = new ObjectMapper();
+        mapper = new ObjectMapper();
         mapper.findAndRegisterModules()
-                .registerModule(new SimpleModule().addSerializer(new LocalDateSerializer()));
-        super(mapper, DEFAULT_ANNOTATIONS);
+                .registerModule(new SimpleModule().addSerializer(new LocalDateSerializer(FORMAT)));
     }
 
-    private static class LocalDateSerializer extends com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer {
-        public LocalDateSerializer() {
-            super(FORMAT);
-        }
+    @Override
+    public ObjectMapper getContext(Class<?> type) {
+        return mapper;
     }
 }
