@@ -24,7 +24,7 @@ public class DefaultCustomer implements ICustomer {
 
     /// Constructor of [ICustomer].
     @JsonCreator
-    public DefaultCustomer(@JsonProperty("id") UUID id, @JsonProperty("birthDate") LocalDate birthDate, @JsonProperty("firstName") String firstName, @JsonProperty("gender") Gender gender, @JsonProperty("lastName") String lastName) {
+    public DefaultCustomer(@JsonProperty(value = "id", required = true) UUID id, @JsonProperty(value = "birthDate", required = true) LocalDate birthDate, @JsonProperty(value = "firstName", required = true) String firstName, @JsonProperty(value = "gender", required = true) Gender gender, @JsonProperty(value = "lastName", required = true) String lastName) {
         this.id = id;
         this.birthDate = birthDate;
         this.firstName = firstName;

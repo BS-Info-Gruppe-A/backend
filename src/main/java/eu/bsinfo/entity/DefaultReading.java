@@ -40,14 +40,14 @@ public class DefaultReading implements IReading {
     private Boolean substitute;
 
     @JsonCreator
-    public DefaultReading(@JsonProperty("id") @Nullable UUID id,
+    public DefaultReading(@JsonProperty(value = "id", required = true) @Nullable UUID id,
                           @JsonProperty("comment") @NotNull String comment,
-                          @JsonProperty("customer") @Nullable ICustomer customer,
-                          @JsonProperty("dateOfReading") @NotNull LocalDate dateOfReading,
-                          @JsonProperty("kindOfMeter") @NotNull KindOfMeter kindOfMeter,
-                          @JsonProperty("meterCount") @NotNull Double meterCount,
-                          @JsonProperty("meterId") int meterId,
-                          @JsonProperty("substitute") @NotNull Boolean substitute
+                          @JsonProperty(value = "customer", required = true) @Nullable ICustomer customer,
+                          @JsonProperty(value = "dateOfReading", required = true) @NotNull LocalDate dateOfReading,
+                          @JsonProperty(value = "kindOfMeter", required = true) @NotNull KindOfMeter kindOfMeter,
+                          @JsonProperty(value = "meterCount", required = true) @NotNull Double meterCount,
+                          @JsonProperty(value = "meterId", required = true) int meterId,
+                          @JsonProperty(value = "substitute", required = true) @NotNull Boolean substitute
     ) {
         this.id = id;
         this.comment = comment;
